@@ -17,3 +17,22 @@ F:\Dokumenty\Vysoká škola\Projekty\3DScanning\3DScanning\bin\Debug\Microsoft.K
 F:\Dokumenty\Vysoká škola\Projekty\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.xml
 F:\Dokumenty\Vysoká škola\Projekty\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Fusion.xml
 F:\Dokumenty\Vysoká škola\Projekty\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Tools.xml
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\3DScanning.exe.config
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.exe
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.pdb
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\3DScanning.exe
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\3DScanning.pdb
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Fusion.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Tools.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTK.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTK.GLControl.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTKLib.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTKLib.pdb
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.xml
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Fusion.xml
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Tools.xml
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.csprojResolveAssemblyReference.cache
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Form.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Properties.Resources.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.csproj.GenerateResource.Cache

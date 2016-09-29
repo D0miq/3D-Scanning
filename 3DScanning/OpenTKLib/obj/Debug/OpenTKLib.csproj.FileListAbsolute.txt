@@ -26,3 +26,17 @@ F:\Dokumenty\Vysoká škola\Projekty\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.Op
 F:\Dokumenty\Vysoká škola\Projekty\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.csproj.GenerateResource.Cache
 F:\Dokumenty\Vysoká škola\Projekty\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.dll
 F:\Dokumenty\Vysoká škola\Projekty\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.pdb
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\bin\OpenTKLib.dll.config
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\bin\OpenTKLib.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\bin\OpenTKLib.pdb
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.csprojResolveAssemblyReference.cache
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.AboutForm.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.SettingsForm.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.MultipleOGLControls.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.OpenTKForm.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.FastGLControl.OpenTKFormAlternative.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.Properties.Resources.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.OpenGLUC.resources
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.csproj.GenerateResource.Cache
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.dll
+F:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.pdb

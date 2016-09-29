@@ -75,7 +75,7 @@ namespace _3DScanning
         /// </summary>
         public Form()
         {
-            this.kinect = new KinectDepthSensor(reader_FrameArrived);
+            this.kinect = new KinectDepthSensor(this.reader_FrameArrived);
             this.kinectAttributes = this.kinect.Attributes;
             this.depthFrameLength = this.kinect.Description.LengthInPixels;
             this.csPoints = new CameraSpacePoint[this.depthFrameLength];
@@ -97,44 +97,44 @@ namespace _3DScanning
                     {
                         using (KinectBuffer depthBuffer = depthFrame.LockImageBuffer())
                         {
-                            if (this.generating)
-                            {
-                                //Getting depths from ImageBuffer
-                                this.framesCounter++;
-                                ushort* depthData = (ushort*)depthBuffer.UnderlyingBuffer;
-                                ushort[] depthArray = new ushort[this.depthFrameLength];
+                            //Getting depths from ImageBuffer
+                            ushort* depthData = (ushort*)depthBuffer.UnderlyingBuffer;
+                            ushort[] depthArray = new ushort[this.depthFrameLength];
 
-                                for (int i = 0; i < depthArray.Length; i++)
+                            for (int i = 0; i < depthArray.Length; i++)
+                            {
+                                if (depthData[i] < this.kinectAttributes.MaxDepth && depthData[i] > this.kinectAttributes.MinDepth)
                                 {
                                     depthArray[i] = depthData[i];
                                 }
-
+                            }
+                            if (this.generating)
+                            {
+                                this.framesCounter++;
                                 this.framesList.Add(depthArray);
-
                                 //When enough frames are stored interpolation begins
                                 if (framesCounter == this.kinectAttributes.Interpolation)
-                                {
+                                {                                 
                                     ushort[] interpolatedDepths = this.interpolateFrames(this.framesList);
-                                   
                                     //When you scan scenery without sharps changeovers you can use commented line below, that will lower diferences between depth of pixels more than the uncommented one
                                     //this.kinect.Mapper.MapDepthFrameToCameraSpace(this.smoothEntropyValues(interpolatedDepths), this.csPoints);
                                     this.kinect.Mapper.MapDepthFrameToCameraSpace(interpolatedDepths, this.csPoints);
-
                                     this.transformedPoints = this.cameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
-
                                     this.generateMesh(this.transformedPoints);
-                                    
+                                    this.statusLB.Text = "Mesh byl vygenerován a uložen!";
+                                    this.generating = false;
+                                    this.kinect.stop();                                   
                                 }
                             }
                             else
                             {
                                 this.rendering = true;
-                                this.kinect.Mapper.MapDepthFrameToCameraSpaceUsingIntPtr(
-                                           depthBuffer.UnderlyingBuffer,
-                                           depthBuffer.Size,
-                                           this.csPoints);
+                                this.kinect.Mapper.MapDepthFrameToCameraSpace(depthArray,this.csPoints);
                                 this.transformedPoints = this.cameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
                                 this.renderPointCloud(this.transformedPoints);
+                                this.statusLB.Text = "Náhled byl zobrazen!";
+                                this.rendering = false;
+                                this.kinect.stop();
                             }
                         }
                     }
@@ -319,10 +319,6 @@ namespace _3DScanning
                 sw.WriteLine("f {0} {1} {2}", this.triangles[i][0], this.triangles[i][1], this.triangles[i][2]);
             }
             sw.Close();
-
-            this.statusLB.Text = "Mesh byl vygenerován a uložen!";
-            this.generating = false;
-            this.kinect.stop();
         }
 
         /// <summary>
@@ -343,9 +339,6 @@ namespace _3DScanning
             PointCloud pc = PointCloud.FromVector3List(pointList);
             this.model.PointCloud = pc;
             this.viewport.GLrender.ReplaceRenderableObject(this.model, false);
-            this.statusLB.Text = "Náhled byl zobrazen!";
-            this.rendering = false;
-            this.kinect.stop();
         }
 
         /// <summary>

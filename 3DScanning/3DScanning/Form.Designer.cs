@@ -41,7 +41,6 @@
             this.interpolationValueLB = new System.Windows.Forms.Label();
             this.interpolationLB = new System.Windows.Forms.Label();
             this.interpolationTB = new System.Windows.Forms.TrackBar();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.viewport = new OpenTKLib.OGLControl();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
@@ -58,7 +57,6 @@
             this.tableLayoutPanel1.Controls.Add(this.previewBT, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.generateBT, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.statusLB, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.progressBar, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.minDepthLB, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.minDepthTB, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.minDepthValueLB, 2, 1);
@@ -213,15 +211,6 @@
             this.interpolationTB.TickStyle = System.Windows.Forms.TickStyle.None;
             this.interpolationTB.DataBindings.Add("Value", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
             // 
-            // progressBar
-            // 
-            this.progressBar.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(78, 405);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(144, 23);
-            this.progressBar.Step = 20;
-            this.progressBar.TabIndex = 18;
-            // 
             // viewport
             // 
             this.viewport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(255)))));
@@ -266,7 +255,6 @@
         private System.Windows.Forms.Label interpolationValueLB;
         private System.Windows.Forms.Label interpolationLB;
         private System.Windows.Forms.TrackBar interpolationTB;
-        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
 
