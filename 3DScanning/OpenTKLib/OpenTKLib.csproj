@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <!--Project was exported from assembly: A:\Archiv\3D\OpenTK\Games_Samples\Lab3D\Lab3D.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF1F2330-134C-4EC6-A97C-3011D3072F0A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>OpenTKLib</AssemblyName>
+    <RootNamespace>OpenTKLib</RootNamespace>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.2.1</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\binExtern\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\binExtern\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extensions\ImageExtensions.cs" />
+    <Compile Include="Extensions\BitmapExtension.cs" />
+    <Compile Include="Extensions\LockBitmap.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="Extensions\Matrix2dExtension.cs" />
+    <Compile Include="Extensions\Matrix3Extension.cs" />
+    <Compile Include="Extensions\Matrix3dExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\QuaternionNew.cs" />
+    <Compile Include="Extensions\Vector3Extension.cs" />
+    <Compile Include="ExternalComponents\Alglib\alglibinternal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\alglibmisc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\ap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\dataanalysis.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\diffequations.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\fasttransforms.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\integration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\interpolation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\linalg.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\optimization.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\solvers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\specialfunctions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\Alglib\statistics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExternalComponents\DotNetMatrix\GeneralMatrix.cs" />
+    <Compile Include="FormsOther\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormsOther\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormsOther\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormsOther\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MultipleOGLControls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MultipleOGLControls.Designer.cs">
+      <DependentUpon>MultipleOGLControls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ICPUtils\DebugWriteUtils.cs" />
+    <Compile Include="ICPUtils\LandmarkTransform.cs" />
+    <Compile Include="ICPUtils\MathUtilsVTK.cs" />
+    <Compile Include="ICPUtils\MatrixUtilsVTK.cs" />
+    <Compile Include="ICP\ICP.cs" />
+    <Compile Include="ICP\ICPSolution.cs" />
+    <Compile Include="ICP\ICPTestData.cs" />
+    <Compile Include="ICP\ICP_SA.cs" />
+    <Compile Include="ICP\ICP_Stitch.cs" />
+    <Compile Include="ICP\SettingsICP.cs" />
+    <Compile Include="LinearAlgebra\Math.cs" />
+    <Compile Include="_baseClasses\Model\ExampleModels.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\CameraFOV.cs" />
+    <Compile Include="_Controls\OGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_baseClasses\OpenGLContext.cs" />
+    <Compile Include="Forms\OpenTKForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OpenTKForm.Designer.cs">
+      <DependentUpon>OpenTKForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpenTKFormAlternative.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OpenTKFormAlternative.Designer.cs">
+      <DependentUpon>OpenTKFormAlternative.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Triangulation\TetrahedralMarcher\MarchingCubes.cs" />
+    <Compile Include="Triangulation\TetrahedralMarcher\TablesMarchingCube.cs" />
+    <Compile Include="Triangulation\TetrahedralMarcher\TetrahedralMarcher.cs" />
+    <Compile Include="UserControl\UC_BusinessLogic.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\UC_Display.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\UC_Model.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\UC_PointCloud.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_baseClasses\Camera\AbstractCamera.cs" />
+    <Compile Include="_baseClasses\Camera\CPlane.cs" />
+    <Compile Include="_baseClasses\Camera\FreeCamera.cs" />
+    <Compile Include="_baseClasses\Camera\TargetCamera.cs" />
+    <Compile Include="OpenGL\FPSCalculator.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="_baseClasses\Model\Model.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\Grid.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\CubePerspective.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\_RenderableObject.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\SampleCloud.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\Triangle.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\PointCloudRenderable.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\Axes.cs" />
+    <Compile Include="_baseClasses\RenderableObjects\UnitCube.cs" />
+    <Compile Include="Utils\PerformanceCheck.cs" />
+    <Compile Include="_baseClasses\PointCloud.cs" />
+    <Compile Include="_baseClasses\Shader\Shader.cs" />
+    <Compile Include="MITriangulation\Helper\Collections.cs" />
+    <Compile Include="MITriangulation\Helper\Constants.cs" />
+    <Compile Include="MITriangulation\Helper\ConvexFace.cs" />
+    <Compile Include="MITriangulation\Helper\ConvexFaceInternal.cs" />
+    <Compile Include="MITriangulation\Helper\ConvexHull.cs" />
+    <Compile Include="MITriangulation\Helper\ConvexHullInternal.cs" />
+    <Compile Include="MITriangulation\Helper\IVertexPosition.cs" />
+    <Compile Include="MITriangulation\Helper\MathHelper.cs" />
+    <Compile Include="MITriangulation\Helper\ObjectManager.cs" />
+    <Compile Include="Extensions\KeyValueList.cs" />
+    <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\Matrix4dExtension.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="General\KeyValues.cs" />
+    <Compile Include="Geometry\Line.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cChain.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cDiagonal.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cDiagonalList.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cEdge.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cEdgeList.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cFace.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cFaceList.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\ConvConv.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\ConvexHull2D.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\ConvexHull3D.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cPointd.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cPointi.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cPolygoni.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cSegSeg.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cVertex.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\cVertexList.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\DelaunayTri_Old.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\DelaunayTri.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\InPolyh.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\MinkConvol.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\Sphere.cs" />
+    <Compile Include="ExternalComponents\Hull_ORourke\Template.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\EllipseWrapper.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Stark.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTreeVertex.cs" />
+    <Compile Include="Geometry\Triangle.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\IDistanceFunction.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\IntervalHeap.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\KDNode.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\KDTree_Rednaxela.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\MinHeap.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Rednaxela\NearestNeighbour.cs" />
+    <Compile Include="LinearAlgebra\ICPVersionUsed.cs" />
+    <Compile Include="LinearAlgebra\MaNet\CholeskyDecomposition.cs" />
+    <Compile Include="LinearAlgebra\MaNet\EigenvalueDecomposition.cs" />
+    <Compile Include="LinearAlgebra\MaNet\LUDecomposition.cs" />
+    <Compile Include="LinearAlgebra\MaNet\Maths.cs" />
+    <Compile Include="LinearAlgebra\MaNet\Matrix.cs" />
+    <Compile Include="LinearAlgebra\MaNet\Parser.cs" />
+    <Compile Include="LinearAlgebra\MaNet\QRDecomposition.cs" />
+    <Compile Include="LinearAlgebra\MaNet\Rectangular.cs" />
+    <Compile Include="LinearAlgebra\MaNet\SingularValueDecomposition.cs" />
+    <Compile Include="LinearAlgebra\MaNet\Specialized.cs" />
+    <Compile Include="LinearAlgebra\PCA.cs" />
+    <Compile Include="LinearAlgebra\SVD.cs" />
+    <Compile Include="MITriangulation\DelaunayTriangulation.cs" />
+    <Compile Include="MITriangulation\Triangulation.cs" />
+    <Compile Include="MITriangulation\TriangulationCell.cs" />
+    <Compile Include="MITriangulation\VoronoiEdge.cs" />
+    <Compile Include="MITriangulation\VoronoiMesh.cs" />
+    <Compile Include="OpenGL\CLEnum.cs" />
+    <Compile Include="ExternalComponents\Numerics\Hull\BoundingBox.cs" />
+    <Compile Include="ExternalComponents\Numerics\Hull\Edge.cs" />
+    <Compile Include="ExternalComponents\Numerics\Hull\Box.cs" />
+    <Compile Include="ExternalComponents\Numerics\NewList.cs" />
+    <Compile Include="ExternalComponents\Numerics\Polyline.cs" />
+    <Compile Include="ExternalComponents\Numerics\Utils\GenericMath.cs" />
+    <Compile Include="Geometry\IntersectionResult.cs" />
+    <Compile Include="ExternalComponents\Numerics\Line3.cs" />
+    <Compile Include="ExternalComponents\Numerics\Matrix33.cs" />
+    <Compile Include="ExternalComponents\Numerics\Matrix44.cs" />
+    <Compile Include="ExternalComponents\Numerics\Utils\Numeric.cs" />
+    <Compile Include="ExternalComponents\Numerics\Utils\NumericConverter.cs" />
+    <Compile Include="ExternalComponents\Numerics\Plane3.cs" />
+    <Compile Include="ExternalComponents\Numerics\Shear.cs" />
+    <Compile Include="ExternalComponents\Numerics\Utils\ExpressionUtil.cs" />
+    <Compile Include="ExternalComponents\Numerics\Utils\NullOp.cs" />
+    <Compile Include="ExternalComponents\Numerics\Utils\Operator.cs" />
+    <Compile Include="ExternalComponents\Numerics\Vector2.cs" />
+    <Compile Include="ExternalComponents\Numerics\Vector3.cs" />
+    <Compile Include="Geometry\VertexComparer.cs" />
+    <Compile Include="_baseClasses\Camera.cs" />
+    <Compile Include="_baseClasses\IOUtils.cs" />
+    <Compile Include="ExternalComponents\Numerics\Hull\HullVoronoi.cs" />
+    <Compile Include="ExternalComponents\KDTree\KDTree_Numerics.cs" />
+    <Compile Include="ExternalComponents\Numerics\Hull\HullFrameVoronoi.cs" />
+    <Compile Include="ExternalComponents\Numerics\Hull\VertexHull.cs" />
+    <Compile Include="Extensions\Vector3dExtension.cs" />
+    <Compile Include="Extensions\TextRenderer.cs" />
+    <Compile Include="OpenGL\OpenGLTextWriter.cs" />
+    <Compile Include="_baseClasses\UtilsPointCloudIO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Triangulation\CellVertex.cs" />
+    <Compile Include="Geometry\Plane.cs" />
+    <Compile Include="Triangulation\Cell2D.cs" />
+    <Compile Include="Triangulation\Vertex2D.cs" />
+    <Compile Include="Triangulation\VoronoiFortune\FortuneVoronoiUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Triangulation\VoronoiFortune\FortuneVoronoiUI.Designer.cs">
+      <DependentUpon>FortuneVoronoiUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Triangulation\VoronoiFortune\Voronoi.cs" />
+    <Compile Include="Triangulation\VoronoiFortune\VoronoiElements.cs" />
+    <Compile Include="Globals\GLSettings.cs" />
+    <Compile Include="Utils\Comparer.cs" />
+    <Compile Include="Extensions\MathBase.cs" />
+    <Compile Include="Extensions\MatrixUtilsOpenTK.cs" />
+    <Compile Include="Utils\RandomUtils.cs" />
+    <Compile Include="_baseClasses\PointCloudVertices.cs" />
+    <Compile Include="_baseClasses\VertexSimple.cs" />
+    <Compile Include="_baseClasses\old\Vertex.cs" />
+    <Compile Include="Geometry\Part.cs" />
+    <Compile Include="Globals\GlobalVariables.cs" />
+    <Compile Include="Utils\ScreenSaver.cs" />
+    <Compile Include="Properties\Resources.cs" />
+    <Compile Include="Utils\XMLFuncs.cs" />
+    <Compile Include="_Controls\_OpenGLUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Controls\_OpenGLUC.Designer.cs">
+      <DependentUpon>_OpenGLUC.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormsOther\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormsOther\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MultipleOGLControls.resx">
+      <DependentUpon>MultipleOGLControls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OpenTKForm.resx">
+      <DependentUpon>OpenTKForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OpenTKFormAlternative.resx">
+      <DependentUpon>OpenTKFormAlternative.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Controls\_OpenGLUC.resx">
+      <DependentUpon>_OpenGLUC.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExternalComponents\KDTree\KDTreeBitbucket\" />
+    <Folder Include="IO\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
