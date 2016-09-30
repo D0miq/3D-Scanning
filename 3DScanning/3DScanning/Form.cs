@@ -84,6 +84,17 @@ namespace _3DScanning
         }
 
         /// <summary>
+        /// Disables or enables controls that adjust kinect attributes
+        /// </summary>
+        /// <param name="state">Defines if controls are disable or enable</param>
+        private void disableControls(bool state)
+        {
+            this.minDepthTB.Enabled = !state;
+            this.maxDepthTB.Enabled = !state;
+            this.interpolationTB.Enabled = !state;
+        }
+
+        /// <summary>
         /// Binds controls to kinect attributes
         /// </summary>
         private void dataBinding()
@@ -132,6 +143,7 @@ namespace _3DScanning
                                     this.progressBar.Hide();
                                     this.progressBar.Value = 0;
                                     this.generating = false;
+                                    this.disableControls(false);
                                     this.kinect.stop();
                                 }
                             }
@@ -143,6 +155,7 @@ namespace _3DScanning
                                 this.renderPointCloud(this.transformedPoints);
                                 this.statusLB.Text = "Náhled byl zobrazen!";
                                 this.rendering = false;
+                                this.disableControls(false);
                                 this.kinect.stop();
                             }
                         }
@@ -354,6 +367,7 @@ namespace _3DScanning
         private void generateBT_Click(object sender, EventArgs e)
         {
             this.statusLB.Text = "Probíhá generování meshe!";
+            this.disableControls(true);
             this.generating = true;
             this.progressBar.Show();
             this.framesCounter = 0;
@@ -370,6 +384,7 @@ namespace _3DScanning
         private void previewBT_Click(object sender, EventArgs e)
         {
             this.statusLB.Text = "Probíhá vytvoření náhledu!";
+            this.disableControls(true);
             this.kinect.start();          
         }
     }
