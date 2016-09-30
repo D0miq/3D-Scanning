@@ -80,6 +80,21 @@ namespace _3DScanning
             this.depthFrameLength = this.kinect.Description.LengthInPixels;
             this.csPoints = new CameraSpacePoint[this.depthFrameLength];
             InitializeComponent();
+            this.dataBinding();     
+        }
+
+        /// <summary>
+        /// Binds controls to kinect attributes
+        /// </summary>
+        private void dataBinding()
+        {
+            this.minDepthTB.DataBindings.Add("Value", this.kinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthTB.DataBindings.Add("Value", this.kinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.minDepthValueLB.DataBindings.Add("Text", this.kinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthValueLB.DataBindings.Add("Text", this.kinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationValueLB.DataBindings.Add("Text", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationTB.DataBindings.Add("Value", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.progressBar.DataBindings.Add("Maximum", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
         }
 
         /// <summary>
@@ -87,7 +102,7 @@ namespace _3DScanning
         /// </summary>
         /// <param name="sender">Object sending the event</param>
         /// <param name="e">Event arguments</param>
-        private unsafe void reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
+        private void reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
         {
             using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
             {
@@ -97,33 +112,27 @@ namespace _3DScanning
                     {
                         using (KinectBuffer depthBuffer = depthFrame.LockImageBuffer())
                         {
-                            //Getting depths from ImageBuffer
-                            ushort* depthData = (ushort*)depthBuffer.UnderlyingBuffer;
-                            ushort[] depthArray = new ushort[this.depthFrameLength];
+                            ushort[] depthArray = getDepthFromBuffer(depthBuffer);
 
-                            for (int i = 0; i < depthArray.Length; i++)
-                            {
-                                if (depthData[i] < this.kinectAttributes.MaxDepth && depthData[i] > this.kinectAttributes.MinDepth)
-                                {
-                                    depthArray[i] = depthData[i];
-                                }
-                            }
                             if (this.generating)
                             {
                                 this.framesCounter++;
+                                this.progressBar.PerformStep();
                                 this.framesList.Add(depthArray);
                                 //When enough frames are stored interpolation begins
                                 if (framesCounter == this.kinectAttributes.Interpolation)
-                                {                                 
+                                {                                    
                                     ushort[] interpolatedDepths = this.interpolateFrames(this.framesList);
-                                    //When you scan scenery without sharps changeovers you can use commented line below, that will lower diferences between depth of pixels more than the uncommented one
-                                    //this.kinect.Mapper.MapDepthFrameToCameraSpace(this.smoothEntropyValues(interpolatedDepths), this.csPoints);
-                                    this.kinect.Mapper.MapDepthFrameToCameraSpace(interpolatedDepths, this.csPoints);
+                                    this.progressBar.PerformStep();
+                                    this.kinect.Mapper.MapDepthFrameToCameraSpace(interpolatedDepths, this.csPoints);                                    
                                     this.transformedPoints = this.cameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
+                                    this.progressBar.PerformStep();
                                     this.generateMesh(this.transformedPoints);
                                     this.statusLB.Text = "Mesh byl vygenerován a uložen!";
+                                    this.progressBar.Hide();
+                                    this.progressBar.Value = 0;
                                     this.generating = false;
-                                    this.kinect.stop();                                   
+                                    this.kinect.stop();
                                 }
                             }
                             else
@@ -140,6 +149,26 @@ namespace _3DScanning
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Getting depths from buffer
+        /// </summary>
+        /// <param name="depthBuffer">Buffer</param>
+        /// <returns>Array with depths</returns>
+        private unsafe ushort[] getDepthFromBuffer(KinectBuffer depthBuffer)
+        {
+            ushort* depthData = (ushort*)depthBuffer.UnderlyingBuffer;
+            ushort[] depthArray = new ushort[this.depthFrameLength];
+
+            for (int i = 0; i < depthArray.Length; i++)
+            {
+                if (depthData[i] < this.kinectAttributes.MaxDepth && depthData[i] > this.kinectAttributes.MinDepth)
+                {
+                    depthArray[i] = depthData[i];
+                }
+            }
+            return depthArray;
         }
 
         /// <summary>
@@ -241,30 +270,6 @@ namespace _3DScanning
         }
 
         /// <summary>
-        /// Smooths diference of nearby pixels
-        /// </summary>
-        /// <param name="originalValues"> Depth array </param>
-        ///<returns> Array of smoothed depths </returns>
-        private ushort[] smoothEntropyValues(ushort[] originalValues)
-        {
-            ushort[] smoothedValues = new ushort[originalValues.Length];
-
-            double[] mask = new double[] { 0.25, 0.5, 0.25 };
-
-            for (int bin = 1; bin < originalValues.Length - 1; bin++)
-            {
-                double smoothedValue = 0;
-                for (int i = 0; i < mask.Length; i++)
-                {
-                    smoothedValue += originalValues[bin -1 + i] * mask[i];
-                }
-                smoothedValues[bin] = (ushort)smoothedValue;
-            }
-
-            return smoothedValues;
-        }
-
-        /// <summary>
         /// Interpolates depth of every pixels in given frames
         /// </summary>
         /// <param name="framesList"> List of depth arrays </param>
@@ -350,6 +355,7 @@ namespace _3DScanning
         {
             this.statusLB.Text = "Probíhá generování meshe!";
             this.generating = true;
+            this.progressBar.Show();
             this.framesCounter = 0;
             this.framesList.Clear();
             this.kinect.start();
