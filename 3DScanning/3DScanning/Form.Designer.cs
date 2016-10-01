@@ -90,7 +90,7 @@
             this.previewBT.TabIndex = 0;
             this.previewBT.Text = "Náhled";
             this.previewBT.UseVisualStyleBackColor = true;
-            this.previewBT.Click += new System.EventHandler(this.previewBT_Click);
+            this.previewBT.Click += new System.EventHandler(this.PreviewBT_Click);
             // 
             // minDepthLB
             // 
@@ -206,7 +206,7 @@
             this.generateBT.TabIndex = 1;
             this.generateBT.Text = "Generovat mesh";
             this.generateBT.UseVisualStyleBackColor = true;
-            this.generateBT.Click += new System.EventHandler(this.generateBT_Click);
+            this.generateBT.Click += new System.EventHandler(this.GenerateBT_Click);
             // 
             // progressBar
             // 

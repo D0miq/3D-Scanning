@@ -75,19 +75,41 @@ namespace _3DScanning
         /// </summary>
         public Form()
         {
-            this.kinect = new KinectDepthSensor(this.reader_FrameArrived);
+            this.kinect = new KinectDepthSensor(this.Reader_FrameArrived);
             this.kinectAttributes = this.kinect.Attributes;
             this.depthFrameLength = this.kinect.Description.LengthInPixels;
             this.csPoints = new CameraSpacePoint[this.depthFrameLength];
             InitializeComponent();
-            this.dataBinding();     
+            this.DataBinding();     
+        }
+
+        /// <summary>
+        /// Destructor that frees resources
+        /// </summary>
+        ~Form()
+        {
+            if (this.kinect != null)
+            {
+                this.kinect.Dispose();
+                this.kinect = null;
+            }
+            if(this.viewport != null)
+            {
+                this.viewport.Dispose();
+                this.viewport = null;
+            }  
+            if(this.model != null)
+            {
+                this.model.Dispose();
+                this.model = null;
+            }
         }
 
         /// <summary>
         /// Disables or enables controls that adjust kinect attributes
         /// </summary>
         /// <param name="state">Defines if controls are disable or enable</param>
-        private void disableControls(bool state)
+        private void DisableControls(bool state)
         {
             this.minDepthTB.Enabled = !state;
             this.maxDepthTB.Enabled = !state;
@@ -97,7 +119,7 @@ namespace _3DScanning
         /// <summary>
         /// Binds controls to kinect attributes
         /// </summary>
-        private void dataBinding()
+        private void DataBinding()
         {
             this.minDepthTB.DataBindings.Add("Value", this.kinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
             this.maxDepthTB.DataBindings.Add("Value", this.kinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
@@ -113,7 +135,7 @@ namespace _3DScanning
         /// </summary>
         /// <param name="sender">Object sending the event</param>
         /// <param name="e">Event arguments</param>
-        private void reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
+        private void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
         {
             using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
             {
@@ -123,7 +145,7 @@ namespace _3DScanning
                     {
                         using (KinectBuffer depthBuffer = depthFrame.LockImageBuffer())
                         {
-                            ushort[] depthArray = getDepthFromBuffer(depthBuffer);
+                            ushort[] depthArray = GetDepthFromBuffer(depthBuffer);
 
                             if (this.generating)
                             {
@@ -133,30 +155,30 @@ namespace _3DScanning
                                 //When enough frames are stored interpolation begins
                                 if (framesCounter == this.kinectAttributes.Interpolation)
                                 {                                    
-                                    ushort[] interpolatedDepths = this.interpolateFrames(this.framesList);
+                                    ushort[] interpolatedDepths = this.InterpolateFrames(this.framesList);
                                     this.progressBar.PerformStep();
                                     this.kinect.Mapper.MapDepthFrameToCameraSpace(interpolatedDepths, this.csPoints);                                    
-                                    this.transformedPoints = this.cameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
+                                    this.transformedPoints = this.CameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
                                     this.progressBar.PerformStep();
-                                    this.generateMesh(this.transformedPoints);
+                                    this.GenerateMesh(this.transformedPoints);
                                     this.statusLB.Text = "Mesh byl vygenerován a uložen!";
                                     this.progressBar.Hide();
                                     this.progressBar.Value = 0;
                                     this.generating = false;
-                                    this.disableControls(false);
-                                    this.kinect.stop();
+                                    this.DisableControls(false);
+                                    this.kinect.Stop();
                                 }
                             }
                             else
                             {
                                 this.rendering = true;
                                 this.kinect.Mapper.MapDepthFrameToCameraSpace(depthArray,this.csPoints);
-                                this.transformedPoints = this.cameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
-                                this.renderPointCloud(this.transformedPoints);
+                                this.transformedPoints = this.CameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
+                                this.RenderPointCloud(this.transformedPoints);
                                 this.statusLB.Text = "Náhled byl zobrazen!";
                                 this.rendering = false;
-                                this.disableControls(false);
-                                this.kinect.stop();
+                                this.DisableControls(false);
+                                this.kinect.Stop();
                             }
                         }
                     }
@@ -169,7 +191,7 @@ namespace _3DScanning
         /// </summary>
         /// <param name="depthBuffer">Buffer</param>
         /// <returns>Array with depths</returns>
-        private unsafe ushort[] getDepthFromBuffer(KinectBuffer depthBuffer)
+        private unsafe ushort[] GetDepthFromBuffer(KinectBuffer depthBuffer)
         {
             ushort* depthData = (ushort*)depthBuffer.UnderlyingBuffer;
             ushort[] depthArray = new ushort[this.depthFrameLength];
@@ -190,22 +212,22 @@ namespace _3DScanning
         /// <param name="depthHeight"> Height of the depth frame </param>
         /// <param name="depthWidth"> Width of the depth frame </param>
         /// <returns> Array of transformed points </returns>
-        private CameraSpacePoint[] cameraToWorldTransfer(int depthWidth, int depthHeight)
+        private CameraSpacePoint[] CameraToWorldTransfer(int depthWidth, int depthHeight)
         {
             bool[] used = new bool[depthHeight * depthWidth];
 
             for (int x = 1; x < depthWidth - 1; x++)
                 for (int y = 1; y < depthHeight - 1; y++)
                 {
-                    if (isOK(depthWidth * y + x - 1)
-                        && isOK(depthWidth * y + x)
-                        && isOK(depthWidth * y + x + 1)
-                        && isOK(depthWidth * (y + 1) + x - 1)
-                        && isOK(depthWidth * (y + 1) + x)
-                        && isOK(depthWidth * (y + 1) + x + 1)
-                        && isOK(depthWidth * (y - 1) + x - 1)
-                        && isOK(depthWidth * (y - 1) + x)
-                        && isOK(depthWidth * (y - 1) + x + 1)
+                    if (IsOK(depthWidth * y + x - 1)
+                        && IsOK(depthWidth * y + x)
+                        && IsOK(depthWidth * y + x + 1)
+                        && IsOK(depthWidth * (y + 1) + x - 1)
+                        && IsOK(depthWidth * (y + 1) + x)
+                        && IsOK(depthWidth * (y + 1) + x + 1)
+                        && IsOK(depthWidth * (y - 1) + x - 1)
+                        && IsOK(depthWidth * (y - 1) + x)
+                        && IsOK(depthWidth * (y - 1) + x + 1)
                         ) used[depthWidth * y + x] = true;
                 }
 
@@ -273,7 +295,7 @@ namespace _3DScanning
         /// </summary>
         /// <param name="index"> Index of the pixel </param>
         /// <returns> Data evaluation </returns>
-        private bool isOK(int index)
+        private bool IsOK(int index)
         {
             if (!double.IsInfinity(csPoints[index].X))
                 if (!double.IsInfinity(csPoints[index].Y))
@@ -287,7 +309,7 @@ namespace _3DScanning
         /// </summary>
         /// <param name="framesList"> List of depth arrays </param>
         /// <returns> Array of interpolated depths </returns>
-        private ushort[] interpolateFrames(List<ushort[]> framesList)
+        private ushort[] InterpolateFrames(List<ushort[]> framesList)
         {
             ushort[] finalDepthArray = new ushort[framesList[0].Length];
             for (int i = 0; i < finalDepthArray.Length; i++)
@@ -320,7 +342,7 @@ namespace _3DScanning
         /// Creates mesh from given points
         /// </summary>
         /// <param name="points"> Array of points </param>
-        private void generateMesh(CameraSpacePoint[] points)
+        private void GenerateMesh(CameraSpacePoint[] points)
         {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
@@ -343,7 +365,7 @@ namespace _3DScanning
         /// Renders point cloud from given points
         /// </summary>
         /// <param name="points"> Array of points </param>
-        private void renderPointCloud(CameraSpacePoint[] points)
+        private void RenderPointCloud(CameraSpacePoint[] points)
         {
             List<Vector3> pointList = new List<Vector3>();
             for (int i = 0; i < points.Length; i++)
@@ -364,15 +386,15 @@ namespace _3DScanning
         /// </summary>
         /// <param name="sender">Object sending the event</param>
         /// <param name="e">Event arguments</param>
-        private void generateBT_Click(object sender, EventArgs e)
+        private void GenerateBT_Click(object sender, EventArgs e)
         {
             this.statusLB.Text = "Probíhá generování meshe!";
-            this.disableControls(true);
+            this.DisableControls(true);
             this.generating = true;
             this.progressBar.Show();
             this.framesCounter = 0;
             this.framesList.Clear();
-            this.kinect.start();
+            this.kinect.Start();
             
         }
 
@@ -381,11 +403,11 @@ namespace _3DScanning
         /// </summary>
         /// <param name="sender">Object sending the event</param>
         /// <param name="e">Event arguments</param>
-        private void previewBT_Click(object sender, EventArgs e)
+        private void PreviewBT_Click(object sender, EventArgs e)
         {
             this.statusLB.Text = "Probíhá vytvoření náhledu!";
-            this.disableControls(true);
-            this.kinect.start();          
+            this.DisableControls(true);
+            this.kinect.Start();          
         }
     }
 }

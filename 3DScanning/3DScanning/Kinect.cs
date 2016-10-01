@@ -3,7 +3,7 @@ using System;
 
 namespace _3DScanning
 {
-    class KinectDepthSensor
+    class KinectDepthSensor: IDisposable
     {
         /// <summary>
         /// Active Kinect sensor
@@ -107,7 +107,7 @@ namespace _3DScanning
         /// <summary>
         /// Stops the kinect sensor
         /// </summary>
-        public void stop()
+        public void Stop()
         {
             if (this.kinectSensor.IsOpen)
             {
@@ -118,12 +118,39 @@ namespace _3DScanning
         /// <summary>
         /// Starts the kinect sensor
         /// </summary>
-        public void start()
+        public void Start()
         {
             if (!this.kinectSensor.IsOpen)
             {
                 this.kinectSensor.Open();
             }
-        }     
+        }
+        
+        /// <summary>
+        /// Implementation of the IDisposable interface, it releases resources
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        /// <param name="disposing">Indicates which resources should be released, true -> all resources, false -> unmanaged resources</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if(this.kinectSensor!= null)
+            {
+                this.kinectSensor.Close();
+                this.kinectSensor = null;
+            }
+            if (this.depthFrameReader != null)
+            {
+                this.depthFrameReader.Dispose();
+                this.depthFrameReader = null;
+            }
+        }  
     }
 }
