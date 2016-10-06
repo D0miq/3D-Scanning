@@ -21,6 +21,11 @@ namespace _3DScanning
         private int interpolation;
 
         /// <summary>
+        /// Indicates if app should generate meshes for every frames
+        /// </summary>
+        private bool generateAll;
+
+        /// <summary>
         /// Inicializes attributes
         /// </summary>
         public KinectAttributes()
@@ -28,6 +33,7 @@ namespace _3DScanning
             this.minDepth = 500;
             this.maxDepth = 8000;
             this.interpolation = 100;
+            this.generateAll = false;
         }
 
         /// <summary>
@@ -98,6 +104,26 @@ namespace _3DScanning
                 if (null != this.PropertyChanged)
                 {
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Interpolation"));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the indicator of  generating all meshes.
+        /// </summary>
+        public bool GenerateAll
+        {
+            get
+            {
+                return this.generateAll;
+            }
+
+            set
+            {
+                this.generateAll = value;
+                if (null != this.PropertyChanged)
+                {
+                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("GenerateAll"));
                 }
             }
         }

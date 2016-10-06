@@ -18,7 +18,7 @@ namespace _3DScanning
         /// <summary>
         /// Model what is rendered on screen
         /// </summary>
-        private RenderableObject model = new PointCloudRenderable();
+        private PointCloudRenderable model = new PointCloudRenderable();
 
         /// <summary>
         /// List of frames
@@ -80,7 +80,7 @@ namespace _3DScanning
             this.depthFrameLength = this.kinect.Description.LengthInPixels;
             this.csPoints = new CameraSpacePoint[this.depthFrameLength];
             InitializeComponent();
-            this.DataBinding();     
+            this.DataBinding();  
         }
 
         /// <summary>
@@ -128,6 +128,7 @@ namespace _3DScanning
             this.interpolationValueLB.DataBindings.Add("Text", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
             this.interpolationTB.DataBindings.Add("Value", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
             this.progressBar.DataBindings.Add("Maximum", this.kinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.generateAllCB.DataBindings.Add("Checked", this.kinectAttributes, "GenerateAll", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
         }
 
         /// <summary>
@@ -378,7 +379,7 @@ namespace _3DScanning
             }
             PointCloud pc = PointCloud.FromVector3List(pointList);
             this.model.PointCloud = pc;
-            this.viewport.GLrender.ReplaceRenderableObject(this.model, false);
+            this.viewport.GLrender.AddRenderableObject(model);
         }
 
         /// <summary>

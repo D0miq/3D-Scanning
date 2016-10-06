@@ -43,6 +43,7 @@
             this.generateBT = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.viewport = new OpenTKLib.OGLControl();
+            this.generateAllCB = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
@@ -65,12 +66,14 @@
             this.tableLayoutPanel1.Controls.Add(this.interpolationLB, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.maxDepthValueLB, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.interpolationValueLB, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.statusLB, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.generateBT, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.progressBar, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.statusLB, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.generateBT, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.progressBar, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.generateAllCB, 1, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 13);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowCount = 8;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -78,7 +81,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(300, 511);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -228,6 +230,19 @@
             this.viewport.TabIndex = 1;
             this.viewport.VSync = false;
             // 
+            // generateAllCB
+            // 
+            this.generateAllCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.generateAllCB.AutoSize = true;
+            this.generateAllCB.Location = new System.Drawing.Point(78, 163);
+            this.generateAllCB.Name = "generateAllCB";
+            this.generateAllCB.Size = new System.Drawing.Size(144, 34);
+            this.generateAllCB.TabIndex = 20;
+            this.generateAllCB.Text = "Generovat všechny meshe";
+            this.generateAllCB.UseVisualStyleBackColor = true;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,6 +279,7 @@
         private System.Windows.Forms.Label interpolationLB;
         private System.Windows.Forms.TrackBar interpolationTB;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.CheckBox generateAllCB;
     }
 }
 
