@@ -42,12 +42,20 @@
             this.statusLB = new System.Windows.Forms.Label();
             this.generateBT = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.viewport = new OpenTKLib.OGLControl();
             this.generateAllCB = new System.Windows.Forms.CheckBox();
+            this.viewport = new OpenTKLib.OGLControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPointCloud = new System.Windows.Forms.TabPage();
+            this.tabDepthFrame = new System.Windows.Forms.TabPage();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.interpolationTB)).BeginInit();
+            this.tabControl.SuspendLayout();
+            this.tabPointCloud.SuspendLayout();
+            this.tabDepthFrame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -221,15 +229,6 @@
             this.progressBar.TabIndex = 19;
             this.progressBar.Visible = false;
             // 
-            // viewport
-            // 
-            this.viewport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(255)))));
-            this.viewport.Location = new System.Drawing.Point(319, 13);
-            this.viewport.Name = "viewport";
-            this.viewport.Size = new System.Drawing.Size(676, 511);
-            this.viewport.TabIndex = 1;
-            this.viewport.VSync = false;
-            // 
             // generateAllCB
             // 
             this.generateAllCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -243,13 +242,62 @@
             this.generateAllCB.Text = "Generovat všechny meshe";
             this.generateAllCB.UseVisualStyleBackColor = true;
             // 
+            // viewport
+            // 
+            this.viewport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(255)))));
+            this.viewport.Location = new System.Drawing.Point(0, 0);
+            this.viewport.Name = "viewport";
+            this.viewport.Size = new System.Drawing.Size(667, 485);
+            this.viewport.TabIndex = 1;
+            this.viewport.VSync = false;
+            // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tabPointCloud);
+            this.tabControl.Controls.Add(this.tabDepthFrame);
+            this.tabControl.Location = new System.Drawing.Point(320, 13);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(675, 511);
+            this.tabControl.TabIndex = 2;
+            // 
+            // tabPointCloud
+            // 
+            this.tabPointCloud.Controls.Add(this.viewport);
+            this.tabPointCloud.Location = new System.Drawing.Point(4, 22);
+            this.tabPointCloud.Name = "tabPointCloud";
+            this.tabPointCloud.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPointCloud.Size = new System.Drawing.Size(667, 485);
+            this.tabPointCloud.TabIndex = 0;
+            this.tabPointCloud.Text = "Point Cloud";
+            this.tabPointCloud.UseVisualStyleBackColor = true;
+            // 
+            // tabDepthFrame
+            // 
+            this.tabDepthFrame.Controls.Add(this.pictureBox);
+            this.tabDepthFrame.Location = new System.Drawing.Point(4, 22);
+            this.tabDepthFrame.Name = "tabDepthFrame";
+            this.tabDepthFrame.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDepthFrame.Size = new System.Drawing.Size(667, 485);
+            this.tabDepthFrame.TabIndex = 1;
+            this.tabDepthFrame.Text = "Depth Frame";
+            this.tabDepthFrame.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(667, 485);
+            this.pictureBox.TabIndex = 0;
+            this.pictureBox.TabStop = false;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 537);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.viewport);
             this.Name = "Form";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Text = "3D Scanning";
@@ -258,6 +306,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.interpolationTB)).EndInit();
+            this.tabControl.ResumeLayout(false);
+            this.tabPointCloud.ResumeLayout(false);
+            this.tabDepthFrame.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -273,13 +325,17 @@
         private System.Windows.Forms.TrackBar maxDepthTB;
         private System.Windows.Forms.Label minDepthValueLB;
         private System.Windows.Forms.Label maxDepthValueLB;
-        private OpenTKLib.OGLControl viewport;
         private System.Windows.Forms.Label statusLB;
         private System.Windows.Forms.Label interpolationValueLB;
         private System.Windows.Forms.Label interpolationLB;
         private System.Windows.Forms.TrackBar interpolationTB;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.CheckBox generateAllCB;
+        private OpenTKLib.OGLControl viewport;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPointCloud;
+        private System.Windows.Forms.TabPage tabDepthFrame;
+        private System.Windows.Forms.PictureBox pictureBox;
     }
 }
 

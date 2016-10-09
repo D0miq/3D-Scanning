@@ -36,3 +36,10 @@ F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.cspro
 F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Form.resources
 F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Properties.Resources.resources
 F:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.csproj.GenerateResource.Cache
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\3DScanning.exe.config
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.exe
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.pdb
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.csprojResolveAssemblyReference.cache
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Form.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Properties.Resources.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.csproj.GenerateResource.Cache
