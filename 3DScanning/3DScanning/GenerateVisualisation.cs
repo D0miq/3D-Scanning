@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Kinect;
 using System.Globalization;
 using System.IO;
+using System.Windows.Forms;
 
 namespace _3DScanning
 {
@@ -26,9 +23,14 @@ namespace _3DScanning
         /// </summary>
         private int framesCounter = 0;
 
-        public GenerateVisualisation()
-        {
+        private ProgressBar progressBar;
 
+        private Label statusText;
+
+        public GenerateVisualisation(ProgressBar progressBar, Label statusText)
+        {
+            this.progressBar = progressBar;
+            this.statusText = statusText;
         }
 
         protected override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
@@ -53,10 +55,10 @@ namespace _3DScanning
                             this.progressBar.PerformStep();
                             this.GenerateMesh(this.transformedPoints);
 
-                            this.statusLB.Text = "Mesh byl vygenerován a uložen!";
+                            this.statusText.Text = "Mesh byl vygenerován a uložen!";
                             this.progressBar.Hide();
                             this.progressBar.Value = 0;
-                            this.DisableControls(false);
+                            //this.DisableControls(false);
                             this.kinect.Stop();
 
                         }
@@ -76,25 +78,22 @@ namespace _3DScanning
             for (int i = 0; i < finalDepthArray.Length; i++)
             {
                 int averageDepth = 0;
-                int max = 0;
-                int min = int.MaxValue;
+                int zeroCounter = 0;
                 foreach (ushort[] depthArray in framesList)
                 {
-                    if (max < depthArray[i]) { max = depthArray[i]; }
-                    if (min > depthArray[i]) { min = depthArray[i]; }
-                    averageDepth = averageDepth + depthArray[i];
-
+                    if (depthArray[i] == 0)
+                    {
+                        zeroCounter++;
+                    }else
+                    {
+                        averageDepth = averageDepth + depthArray[i];
+                    }
                 }
-                //Checks diference between max and min depth values
-                if ((max - min) < LIMIT)
+                if(averageDepth != 0)
                 {
-                    averageDepth = averageDepth / framesList.Count;
-                    finalDepthArray[i] = (ushort)averageDepth;
+                    averageDepth = averageDepth / (framesList.Count - zeroCounter);
                 }
-                else
-                {
-                    finalDepthArray[i] = (ushort)min;
-                }
+                finalDepthArray[i] = (ushort)averageDepth;
             }
             return finalDepthArray;
         }

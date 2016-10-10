@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Kinect;
 using OpenTKLib;
 using OpenTK;
+using System.Windows.Forms;
 
 namespace _3DScanning
 {
@@ -19,9 +20,12 @@ namespace _3DScanning
 
         private OGLControl viewport;
 
-        public RenderVisualisation(OGLControl viewport)
+        private Label statusText;
+
+        public RenderVisualisation(OGLControl viewport, Label statusText)
         {
             this.viewport = viewport;
+            this.statusText = statusText;
         }
 
         protected override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
@@ -37,8 +41,8 @@ namespace _3DScanning
                         this.transformedPoints = this.CameraToWorldTransfer(this.kinect.Description.Width, this.kinect.Description.Height);
                         this.RenderPointCloud(this.transformedPoints);
 
-                        this.statusLB.Text = "Náhled byl zobrazen!";
-                        this.DisableControls(false);
+                        this.statusText.Text = "Náhled byl zobrazen!";
+                        //this.DisableControls(false);
                         this.kinect.Stop();
                     }
                 }

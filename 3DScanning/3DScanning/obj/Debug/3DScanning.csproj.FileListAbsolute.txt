@@ -43,3 +43,15 @@ J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.cspro
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Form.resources
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\_3DScanning.Properties.Resources.resources
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.csproj.GenerateResource.Cache
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\3DScanning.exe
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\3DScanning.pdb
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Fusion.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Tools.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTK.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTK.GLControl.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTKLib.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTKLib.pdb
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.xml
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Fusion.xml
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Tools.xml

@@ -10,7 +10,7 @@ namespace _3DScanning
 {
     public partial class Form : System.Windows.Forms.Form
     {
-        private AVisualisation visual;
+        private AVisualisation visualisation;
 
         /// <summary>
         /// Creates form and inicialize kinect sensor, kinect attributes and camera space points
@@ -18,7 +18,7 @@ namespace _3DScanning
         public Form()
         {
             InitializeComponent();
-            this.visual = new RenderVisualisation(this.viewport);
+            this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
             this.DataBinding();  
         }
 
@@ -50,14 +50,14 @@ namespace _3DScanning
         /// </summary>
         private void DataBinding()
         {
-            this.minDepthTB.DataBindings.Add("Value", this.visual.KinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.maxDepthTB.DataBindings.Add("Value", this.visual.KinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.minDepthValueLB.DataBindings.Add("Text", this.visual.KinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.maxDepthValueLB.DataBindings.Add("Text", this.visual.KinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.interpolationValueLB.DataBindings.Add("Text", this.visual.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.interpolationTB.DataBindings.Add("Value", this.visual.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.progressBar.DataBindings.Add("Maximum", this.visual.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.generateAllCB.DataBindings.Add("Checked", this.visual.KinectAttributes, "GenerateAll", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.minDepthTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.minDepthValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.progressBar.DataBindings.Add("Maximum", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.generateAllCB.DataBindings.Add("Checked", this.visualisation.KinectAttributes, "GenerateAll", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
         }
 
         /// <summary>
@@ -67,14 +67,14 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void GenerateBT_Click(object sender, EventArgs e)
         {
-            if(!(this.visual is GenerateVisualisation))
+            if(!(this.visualisation is GenerateVisualisation))
             {
-                this.visual = new GenerateVisualisation();
+                this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
             }
             this.statusLB.Text = "Probíhá generování meshe!";
             this.DisableControls(true);
             this.progressBar.Show();
-            this.visual.Kinect.Start();
+            this.visualisation.Kinect.Start();
             
         }
 
@@ -85,13 +85,13 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void PreviewBT_Click(object sender, EventArgs e)
         {
-            if (!(this.visual is RenderVisualisation))
+            if (!(this.visualisation is RenderVisualisation))
             {
-                this.visual = new RenderVisualisation(this.viewport);
+                this.visualisation = new RenderVisualisation(this.viewport, this.statusLB);
             }
             this.statusLB.Text = "Probíhá vytvoření náhledu!";
             this.DisableControls(true);
-            this.visual.Kinect.Start();
+            this.visualisation.Kinect.Start();
         }
     }
 }
