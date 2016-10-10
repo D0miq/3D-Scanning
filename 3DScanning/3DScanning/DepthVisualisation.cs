@@ -3,6 +3,7 @@ using Microsoft.Kinect;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Drawing;
+using System.Threading;
 
 namespace _3DScanning
 {
@@ -11,7 +12,7 @@ namespace _3DScanning
         /// <summary>
         /// Map depth range to byte range
         /// </summary>
-        private const int MapDepthToByte = 8000 / 256;
+        private const int MAP_DEPTH_TO_BYTE = 8000 / 256;
 
         private PictureBox box;
 
@@ -21,13 +22,13 @@ namespace _3DScanning
 
         public DepthVisualisation(PictureBox box)
         {
-            this.image = new Bitmap(kinect.Description.Width, kinect.Description.Height);
+            this.image = new Bitmap(this.kinect.Description.Width, this.kinect.Description.Height);
             this.box = box;
             this.box.Image = this.image;
-            this.depthPixels = new ushort[depthFrameLength];
+            this.depthPixels = new ushort[this.depthFrameLength];
         }
 
-        protected override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
+        public override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
         {
             using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
             {
@@ -65,7 +66,7 @@ namespace _3DScanning
 
                 // To convert to a byte, we're mapping the depth value to the byte range.
                 // Values outside the reliable depth range are mapped to 0 (black).
-                this.depthPixels[i] = (byte)(depth >= minDepth && depth <= maxDepth ? (depth / MapDepthToByte) : 0);
+                this.depthPixels[i] = (byte)(depth >= minDepth && depth <= maxDepth ? (depth / MAP_DEPTH_TO_BYTE) : 0);
             }
         }
 
@@ -75,11 +76,12 @@ namespace _3DScanning
         /// </summary>
         private void RenderDepthPixels()
         {
+
             for(int y = 0; y < this.kinect.Description.Height; y++)
             {
                 for(int x = 0; x < this.kinect.Description.Width; x++)
                 {
-                    this.image.SetPixel(x,y, Color.FromArgb(this.depthPixels[y* this.kinect.Description.Width+x],Color.Black));                    
+                    this.image.SetPixel(x,y, Color.FromArgb(this.depthPixels[y* this.kinect.Description.Width+x],Color.Red));                    
                 }
             }
             this.box.Refresh();

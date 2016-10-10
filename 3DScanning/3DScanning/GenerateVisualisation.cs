@@ -33,7 +33,7 @@ namespace _3DScanning
             this.statusText = statusText;
         }
 
-        protected override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
+        public override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
         {
             using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
             {
@@ -58,6 +58,7 @@ namespace _3DScanning
                             this.statusText.Text = "Mesh byl vygenerován a uložen!";
                             this.progressBar.Hide();
                             this.progressBar.Value = 0;
+                            this.framesCounter = 0;
                             //this.DisableControls(false);
                             this.kinect.Stop();
 

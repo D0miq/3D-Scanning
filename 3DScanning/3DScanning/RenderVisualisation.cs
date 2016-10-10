@@ -28,7 +28,7 @@ namespace _3DScanning
             this.statusText = statusText;
         }
 
-        protected override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
+        public override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
         {
             using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
             {

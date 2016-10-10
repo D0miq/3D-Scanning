@@ -31,13 +31,13 @@ namespace _3DScanning
 
         public AVisualisation()
         {
-            this.kinect = new KinectDepthSensor(this.Reader_FrameArrived);
+            this.kinect = KinectDepthSensor.GetInstance();
             this.kinectAttributes = this.kinect.Attributes;
             this.depthFrameLength = this.kinect.Description.LengthInPixels;
             this.csPoints = new CameraSpacePoint[this.depthFrameLength];
         }
 
-        abstract protected void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e);
+        abstract public void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e);
 
         public KinectDepthSensor Kinect
         {

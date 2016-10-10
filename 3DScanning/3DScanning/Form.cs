@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using OpenTKLib;
 using OpenTK;
+using System.Windows.Forms;
 
 namespace _3DScanning
 {
@@ -18,6 +19,7 @@ namespace _3DScanning
         public Form()
         {
             InitializeComponent();
+            this.elementHost.Child = new ImageControl();
             this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
             this.DataBinding();  
         }
@@ -70,9 +72,10 @@ namespace _3DScanning
             if(!(this.visualisation is GenerateVisualisation))
             {
                 this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
+                this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
             }
             this.statusLB.Text = "Probíhá generování meshe!";
-            this.DisableControls(true);
+            //this.DisableControls(true);
             this.progressBar.Show();
             this.visualisation.Kinect.Start();
             
@@ -88,10 +91,29 @@ namespace _3DScanning
             if (!(this.visualisation is RenderVisualisation))
             {
                 this.visualisation = new RenderVisualisation(this.viewport, this.statusLB);
+                this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
             }
             this.statusLB.Text = "Probíhá vytvoření náhledu!";
-            this.DisableControls(true);
+            //this.DisableControls(true);
             this.visualisation.Kinect.Start();
+        }
+
+        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int tabIndex = (sender as TabControl).SelectedIndex;
+            if(tabIndex == 1)
+            {
+                if (!(this.visualisation is DepthVisualisation))
+                {
+                   // this.visualisation = new DepthVisualisation(this.pictureBox);
+                    this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
+                }
+                this.visualisation.Kinect.Start();
+            }
+            else
+            {
+                this.visualisation.Kinect.Stop();
+            }
         }
     }
 }

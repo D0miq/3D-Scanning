@@ -47,7 +47,7 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPointCloud = new System.Windows.Forms.TabPage();
             this.tabDepthFrame = new System.Windows.Forms.TabPage();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
@@ -55,7 +55,6 @@
             this.tabControl.SuspendLayout();
             this.tabPointCloud.SuspendLayout();
             this.tabDepthFrame.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -260,6 +259,7 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(675, 511);
             this.tabControl.TabIndex = 2;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             // 
             // tabPointCloud
             // 
@@ -274,7 +274,7 @@
             // 
             // tabDepthFrame
             // 
-            this.tabDepthFrame.Controls.Add(this.pictureBox);
+            this.tabDepthFrame.Controls.Add(this.elementHost);
             this.tabDepthFrame.Location = new System.Drawing.Point(4, 22);
             this.tabDepthFrame.Name = "tabDepthFrame";
             this.tabDepthFrame.Padding = new System.Windows.Forms.Padding(3);
@@ -283,13 +283,15 @@
             this.tabDepthFrame.Text = "Depth Frame";
             this.tabDepthFrame.UseVisualStyleBackColor = true;
             // 
-            // pictureBox
+            // elementHost
             // 
-            this.pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(667, 485);
-            this.pictureBox.TabIndex = 0;
-            this.pictureBox.TabStop = false;
+            this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHost.Location = new System.Drawing.Point(3, 3);
+            this.elementHost.Name = "elementHost";
+            this.elementHost.Size = new System.Drawing.Size(661, 479);
+            this.elementHost.TabIndex = 0;
+            this.elementHost.Text = "elementHost";
+            this.elementHost.Child = null;
             // 
             // Form
             // 
@@ -309,7 +311,6 @@
             this.tabControl.ResumeLayout(false);
             this.tabPointCloud.ResumeLayout(false);
             this.tabDepthFrame.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -335,7 +336,7 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPointCloud;
         private System.Windows.Forms.TabPage tabDepthFrame;
-        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.Integration.ElementHost elementHost;
     }
 }
 

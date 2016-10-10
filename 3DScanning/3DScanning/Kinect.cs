@@ -5,6 +5,7 @@ namespace _3DScanning
 {
     class KinectDepthSensor: IDisposable
     {
+        private static KinectDepthSensor INSTANCE = new KinectDepthSensor();
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
@@ -30,23 +31,28 @@ namespace _3DScanning
         /// </summary>
         private KinectAttributes kinectAtt;
 
+        private EventHandler<DepthFrameArrivedEventArgs> eventHandler;
+
         /// <summary>
         /// Creates the kinect sensor
         /// </summary>
         /// <param name="eventHandler"> Handler for frame reader </param>
-        public KinectDepthSensor(EventHandler<DepthFrameArrivedEventArgs> eventHandler)
+        private KinectDepthSensor()
         {
             this.kinectSensor = KinectSensor.GetDefault();
 
             this.depthFrameReader = this.kinectSensor.DepthFrameSource.OpenReader();
-
-            this.depthFrameReader.FrameArrived += eventHandler;
-
+            
             this.depthFrameDescription = this.kinectSensor.DepthFrameSource.FrameDescription;
 
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
 
             this.kinectAtt = new KinectAttributes();
+        }
+
+        public static KinectDepthSensor GetInstance()
+        {
+            return INSTANCE;
         }
 
         /// <summary>
@@ -101,6 +107,21 @@ namespace _3DScanning
             get
             {
                 return this.kinectAtt;
+            }
+        }
+
+        public EventHandler<DepthFrameArrivedEventArgs> EventHandler
+        {
+            get
+            {
+                return this.eventHandler;
+            }
+
+            set
+            {
+                this.depthFrameReader.FrameArrived -= this.eventHandler;
+                this.depthFrameReader.FrameArrived += value;
+                this.eventHandler = value;
             }
         }
 

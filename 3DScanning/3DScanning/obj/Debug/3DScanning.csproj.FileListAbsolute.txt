@@ -55,3 +55,10 @@ J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\OpenTKLib.pdb
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.xml
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Fusion.xml
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Tools.xml
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\ImageControl.g.cs
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning_MarkupCompile.cache
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning_MarkupCompile.lref
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Wpf.Controls.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Debug\Microsoft.Kinect.Wpf.Controls.xml
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\ImageControl.baml
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\3DScanning.g.resources
