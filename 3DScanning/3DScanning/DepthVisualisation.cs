@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Kinect;
 using System.Windows.Forms;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.Drawing;
-using System.Threading;
+using System.Windows;
 
 namespace _3DScanning
 {
@@ -14,18 +14,14 @@ namespace _3DScanning
         /// </summary>
         private const int MAP_DEPTH_TO_BYTE = 8000 / 256;
 
-        private PictureBox box;
+        private WriteableBitmap image;
 
-        private Bitmap image;
+        private byte[] depthPixels;
 
-        private ushort[] depthPixels;
-
-        public DepthVisualisation(PictureBox box)
+        public DepthVisualisation(WriteableBitmap image)
         {
-            this.image = new Bitmap(this.kinect.Description.Width, this.kinect.Description.Height);
-            this.box = box;
-            this.box.Image = this.image;
-            this.depthPixels = new ushort[this.depthFrameLength];
+            this.image = image;
+            this.depthPixels = new byte[this.depthFrameLength];
         }
 
         public override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
@@ -76,15 +72,11 @@ namespace _3DScanning
         /// </summary>
         private void RenderDepthPixels()
         {
-
-            for(int y = 0; y < this.kinect.Description.Height; y++)
-            {
-                for(int x = 0; x < this.kinect.Description.Width; x++)
-                {
-                    this.image.SetPixel(x,y, Color.FromArgb(this.depthPixels[y* this.kinect.Description.Width+x],Color.Red));                    
-                }
-            }
-            this.box.Refresh();
+            this.image.WritePixels(
+                new Int32Rect(0, 0, this.image.PixelWidth, this.image.PixelHeight),
+                this.depthPixels,
+                this.image.PixelWidth,
+                0);
         }
     }
 }

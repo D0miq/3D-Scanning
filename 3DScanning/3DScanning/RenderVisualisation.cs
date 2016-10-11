@@ -16,7 +16,7 @@ namespace _3DScanning
         /// <summary>
         /// Model what is rendered on screen
         /// </summary>
-        private PointCloudRenderable model = new PointCloudRenderable();
+        private static PointCloudRenderable model = new PointCloudRenderable();
 
         private OGLControl viewport;
 
@@ -65,7 +65,7 @@ namespace _3DScanning
                 pointList.Add(v);
             }
             PointCloud pc = PointCloud.FromVector3List(pointList);
-            this.model.PointCloud = pc;
+            model.PointCloud = pc;
             this.viewport.GLrender.AddRenderableObject(model);
         }
     }

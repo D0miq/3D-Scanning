@@ -4,6 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:_3DScanning" 
-             Height="300" Width="300">
-    <Image x:Name="image"></Image>
+             >
+    <Image x:Name="image" Stretch="UniformToFill"/>
 </UserControl>

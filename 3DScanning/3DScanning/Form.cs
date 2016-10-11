@@ -6,6 +6,8 @@ using System.IO;
 using OpenTKLib;
 using OpenTK;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace _3DScanning
 {
@@ -13,14 +15,20 @@ namespace _3DScanning
     {
         private AVisualisation visualisation;
 
+        private ImageControl imageControl = new ImageControl();
+
+        private WriteableBitmap bitmap;
+
         /// <summary>
         /// Creates form and inicialize kinect sensor, kinect attributes and camera space points
         /// </summary>
         public Form()
         {
             InitializeComponent();
-            this.elementHost.Child = new ImageControl();
+            this.elementHost.Child = imageControl;
             this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
+            this.bitmap = new WriteableBitmap(this.visualisation.Kinect.Description.Width, this.visualisation.Kinect.Description.Height, 96.0, 96.0, PixelFormats.Gray8, null);
+            this.imageControl.image.Source = this.bitmap;
             this.DataBinding();  
         }
 
@@ -29,11 +37,11 @@ namespace _3DScanning
         /// </summary>
         ~Form()
         {
-            if(this.viewport != null)
+            if (this.viewport != null)
             {
                 this.viewport.Dispose();
                 this.viewport = null;
-            }  
+            }
         }
 
         /// <summary>
@@ -105,7 +113,7 @@ namespace _3DScanning
             {
                 if (!(this.visualisation is DepthVisualisation))
                 {
-                   // this.visualisation = new DepthVisualisation(this.pictureBox);
+                    this.visualisation = new DepthVisualisation(this.bitmap);
                     this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
                 }
                 this.visualisation.Kinect.Start();

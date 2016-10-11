@@ -77,7 +77,8 @@
             this.tableLayoutPanel1.Controls.Add(this.generateBT, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.progressBar, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.generateAllCB, 1, 4);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 13);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -88,7 +89,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(300, 511);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(300, 517);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // previewBT
@@ -200,7 +201,7 @@
             // statusLB
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.statusLB, 3);
-            this.statusLB.Location = new System.Drawing.Point(3, 474);
+            this.statusLB.Location = new System.Drawing.Point(3, 480);
             this.statusLB.Margin = new System.Windows.Forms.Padding(3);
             this.statusLB.Name = "statusLB";
             this.statusLB.Size = new System.Drawing.Size(294, 34);
@@ -209,7 +210,7 @@
             // 
             // generateBT
             // 
-            this.generateBT.Location = new System.Drawing.Point(78, 434);
+            this.generateBT.Location = new System.Drawing.Point(78, 440);
             this.generateBT.Name = "generateBT";
             this.generateBT.Size = new System.Drawing.Size(144, 34);
             this.generateBT.TabIndex = 1;
@@ -220,7 +221,7 @@
             // progressBar
             // 
             this.progressBar.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(78, 405);
+            this.progressBar.Location = new System.Drawing.Point(78, 411);
             this.progressBar.MarqueeAnimationSpeed = 1;
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(144, 23);
@@ -244,9 +245,10 @@
             // viewport
             // 
             this.viewport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(255)))));
-            this.viewport.Location = new System.Drawing.Point(0, 0);
+            this.viewport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.viewport.Location = new System.Drawing.Point(3, 3);
             this.viewport.Name = "viewport";
-            this.viewport.Size = new System.Drawing.Size(667, 485);
+            this.viewport.Size = new System.Drawing.Size(462, 485);
             this.viewport.TabIndex = 1;
             this.viewport.VSync = false;
             // 
@@ -254,10 +256,11 @@
             // 
             this.tabControl.Controls.Add(this.tabPointCloud);
             this.tabControl.Controls.Add(this.tabDepthFrame);
-            this.tabControl.Location = new System.Drawing.Point(320, 13);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(310, 10);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(675, 511);
+            this.tabControl.Size = new System.Drawing.Size(688, 517);
             this.tabControl.TabIndex = 2;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             // 
@@ -267,7 +270,7 @@
             this.tabPointCloud.Location = new System.Drawing.Point(4, 22);
             this.tabPointCloud.Name = "tabPointCloud";
             this.tabPointCloud.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPointCloud.Size = new System.Drawing.Size(667, 485);
+            this.tabPointCloud.Size = new System.Drawing.Size(468, 491);
             this.tabPointCloud.TabIndex = 0;
             this.tabPointCloud.Text = "Point Cloud";
             this.tabPointCloud.UseVisualStyleBackColor = true;
@@ -278,7 +281,7 @@
             this.tabDepthFrame.Location = new System.Drawing.Point(4, 22);
             this.tabDepthFrame.Name = "tabDepthFrame";
             this.tabDepthFrame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDepthFrame.Size = new System.Drawing.Size(667, 485);
+            this.tabDepthFrame.Size = new System.Drawing.Size(680, 491);
             this.tabDepthFrame.TabIndex = 1;
             this.tabDepthFrame.Text = "Depth Frame";
             this.tabDepthFrame.UseVisualStyleBackColor = true;
@@ -288,7 +291,7 @@
             this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost.Location = new System.Drawing.Point(3, 3);
             this.elementHost.Name = "elementHost";
-            this.elementHost.Size = new System.Drawing.Size(661, 479);
+            this.elementHost.Size = new System.Drawing.Size(674, 485);
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost";
             this.elementHost.Child = null;
