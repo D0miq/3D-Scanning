@@ -13,16 +13,17 @@ namespace _3DScanning
         /// <summary>
         /// Triangles of the rendered model
         /// </summary>
-        protected List<int[]> triangles = new List<int[]>();
+        protected List<int[]> triangles;
 
         /// <summary>
-        /// 
+        /// Transformed points on camera view
         /// </summary>
-        protected CameraSpacePoint[] transformedPoints;
+        protected CameraSpacePoint[] csPoints;
 
         public APointCloudVisualisation()
         {
-
+            this.triangles = new List<int[]>();
+            this.csPoints = new CameraSpacePoint[this.depthFrameLength];
         }
 
         /// <summary>
@@ -94,21 +95,24 @@ namespace _3DScanning
                             freeIndex++;
                             indices[depthWidth * (y + 1) + x + 1] = i4;
                         }
-                        triangles.Add(new int[] { i1 + 1, i2 + 1, i3 + 1 });
-                        triangles.Add(new int[] { i2 + 1, i4 + 1, i3 + 1 });
+                        this.triangles.Add(new int[] { i1 + 1, i2 + 1, i3 + 1 });
+                        this.triangles.Add(new int[] { i2 + 1, i4 + 1, i3 + 1 });
                     }
                 }
 
+            return this.Reordering(freeIndex, depthWidth,depthHeight, indices);
+        }
+
+        protected CameraSpacePoint[] Reordering(int freeIndex, int depthWidth, int depthHeight, int[] indices)
+        {
             CameraSpacePoint[] reordered = new CameraSpacePoint[freeIndex];
             for (int i = 0; i < (depthWidth * depthHeight); i++)
             {
                 if (indices[i] > 0)
                     reordered[indices[i]] = csPoints[i];
             }
-
             return reordered;
         }
-
         /// <summary>
         /// Checks coordinates
         /// </summary>

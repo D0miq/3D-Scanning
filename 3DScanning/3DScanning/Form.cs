@@ -15,8 +15,6 @@ namespace _3DScanning
     {
         private AVisualisation visualisation;
 
-        private ImageControl imageControl = new ImageControl();
-
         private WriteableBitmap bitmap;
 
         /// <summary>
@@ -25,10 +23,8 @@ namespace _3DScanning
         public Form()
         {
             InitializeComponent();
-            this.elementHost.Child = imageControl;
-            this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
+            this.visualisation = new ColorfulGenerator(this.progressBar, this.statusLB);
             this.bitmap = new WriteableBitmap(this.visualisation.Kinect.Description.Width, this.visualisation.Kinect.Description.Height, 96.0, 96.0, PixelFormats.Gray8, null);
-            this.imageControl.image.Source = this.bitmap;
             this.DataBinding();  
         }
 
@@ -68,6 +64,7 @@ namespace _3DScanning
             this.interpolationTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
             this.progressBar.DataBindings.Add("Maximum", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
             this.generateAllCB.DataBindings.Add("Checked", this.visualisation.KinectAttributes, "GenerateAll", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            this.imageControl.image.Source = this.bitmap;
         }
 
         /// <summary>
@@ -77,10 +74,13 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void GenerateBT_Click(object sender, EventArgs e)
         {
-            if(!(this.visualisation is GenerateVisualisation))
+
+            if (!(this.visualisation is ColorfulGenerator) && this.colorCB.Checked)
             {
-                this.visualisation = new GenerateVisualisation(this.progressBar, this.statusLB);
-                this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
+                this.visualisation = new ColorfulGenerator(this.progressBar, this.statusLB);
+            }else if(!(this.visualisation is ColorlessGenerator) && !this.colorCB.Checked)
+            {
+                this.visualisation = new ColorlessGenerator(this.progressBar, this.statusLB);
             }
             this.statusLB.Text = "Probíhá generování meshe!";
             //this.DisableControls(true);
@@ -96,9 +96,9 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void PreviewBT_Click(object sender, EventArgs e)
         {
-            if (!(this.visualisation is RenderVisualisation))
+            if (!(this.visualisation is PointCloudRenderer))
             {
-                this.visualisation = new RenderVisualisation(this.viewport, this.statusLB);
+                this.visualisation = new PointCloudRenderer(this.viewport, this.statusLB);
                 this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
             }
             this.statusLB.Text = "Probíhá vytvoření náhledu!";
@@ -111,9 +111,9 @@ namespace _3DScanning
             int tabIndex = (sender as TabControl).SelectedIndex;
             if(tabIndex == 1)
             {
-                if (!(this.visualisation is DepthVisualisation))
+                if (!(this.visualisation is DepthFrameVisualisation))
                 {
-                    this.visualisation = new DepthVisualisation(this.bitmap);
+                    this.visualisation = new DepthFrameVisualisation(this.bitmap);
                     this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
                 }
                 this.visualisation.Kinect.Start();

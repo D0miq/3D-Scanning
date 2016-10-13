@@ -15,11 +15,6 @@ namespace _3DScanning
         protected KinectDepthSensor kinect;
 
         /// <summary>
-        /// Transformed points on camera view
-        /// </summary>
-        protected CameraSpacePoint[] csPoints;
-
-        /// <summary>
         /// Kinect attributes
         /// </summary>
         protected KinectAttributes kinectAttributes;
@@ -34,10 +29,12 @@ namespace _3DScanning
             this.kinect = KinectDepthSensor.GetInstance();
             this.kinectAttributes = this.kinect.Attributes;
             this.depthFrameLength = this.kinect.Description.LengthInPixels;
-            this.csPoints = new CameraSpacePoint[this.depthFrameLength];
+            this.kinect.EventHandler = this.Reader_FrameArrived;
+
+
         }
 
-        abstract public void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e);
+        public abstract void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e);
 
         public KinectDepthSensor Kinect
         {

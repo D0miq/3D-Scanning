@@ -82,14 +82,16 @@
   <ItemGroup>
     <Compile Include="APointCloudVisualisation.cs" />
     <Compile Include="AVisualisation.cs" />
-    <Compile Include="DepthVisualisation.cs" />
+    <Compile Include="ColorfulGenerator.cs" />
+    <Compile Include="ColorlessGenerator.cs" />
+    <Compile Include="DepthFrameVisualisation.cs" />
     <Compile Include="Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form.Designer.cs">
       <DependentUpon>Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="GenerateVisualisation.cs" />
+    <Compile Include="APointCloudGenerator.cs" />
     <Compile Include="ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>
     </Compile>
@@ -97,7 +99,7 @@
     <Compile Include="KinectAttributes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenderVisualisation.cs" />
+    <Compile Include="PointCloudRenderer.cs" />
     <EmbeddedResource Include="Form.resx">
       <DependentUpon>Form.cs</DependentUpon>
     </EmbeddedResource>
