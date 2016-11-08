@@ -1,11 +1,19 @@
 ﻿using Microsoft.Kinect;
 using System;
+using System.ComponentModel;
 
 namespace _3DScanning
 {
-    class KinectDepthSensor: IDisposable
+    /// <summary>
+    /// 
+    /// </summary>
+    class Kinect : IDisposable
     {
-        private static KinectDepthSensor INSTANCE = new KinectDepthSensor();
+        /// <summary>
+        /// 
+        /// </summary>
+        private static Kinect INSTANCE = new Kinect();
+
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
@@ -14,12 +22,17 @@ namespace _3DScanning
         /// <summary>
         /// Reader for depth frames
         /// </summary>
-        private DepthFrameReader depthFrameReader;
+        private MultiSourceFrameReader multiSourceFrameReader;
 
         /// <summary>
         /// Description of the data contained in the depth frame
         /// </summary>
         private FrameDescription depthFrameDescription;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private FrameDescription colorFrameDescription;
 
         /// <summary>
         /// Coordinate mapper to map one type of point to another
@@ -29,28 +42,27 @@ namespace _3DScanning
         /// <summary>
         /// Adjustable attributes of the kinect sensor
         /// </summary>
-        private KinectAttributes kinectAtt;
-
-        private EventHandler<DepthFrameArrivedEventArgs> eventHandler;
+        private KinectAttributes kinectAttributes;
 
         /// <summary>
         /// Creates the kinect sensor
         /// </summary>
         /// <param name="eventHandler"> Handler for frame reader </param>
-        private KinectDepthSensor()
+        private Kinect()
         {
             this.kinectSensor = KinectSensor.GetDefault();
-
-            this.depthFrameReader = this.kinectSensor.DepthFrameSource.OpenReader();
-            
+            this.multiSourceFrameReader = this.kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Depth | FrameSourceTypes.Color);
             this.depthFrameDescription = this.kinectSensor.DepthFrameSource.FrameDescription;
-
+            this.colorFrameDescription = this.kinectSensor.ColorFrameSource.FrameDescription;
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
-
-            this.kinectAtt = new KinectAttributes();
+            this.kinectAttributes = new KinectAttributes();
         }
 
-        public static KinectDepthSensor GetInstance()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Kinect GetInstance()
         {
             return INSTANCE;
         }
@@ -58,7 +70,7 @@ namespace _3DScanning
         /// <summary>
         /// Gets the sensor
         /// </summary>
-        public KinectSensor Sensor
+        public KinectSensor KinectSensor
         {
             get
             {
@@ -69,18 +81,18 @@ namespace _3DScanning
         /// <summary>
         /// Gets the reader of the depth frame
         /// </summary>
-        public DepthFrameReader Reader
+        public MultiSourceFrameReader MultiSourceFrameReader
         {
             get
             {
-                return this.depthFrameReader;
+                return this.multiSourceFrameReader;
             }
         }
 
         /// <summary>
         /// Gets the description of the depth frame
         /// </summary>
-        public FrameDescription Description
+        public FrameDescription DepthFrameDescription
         {
             get
             {
@@ -89,9 +101,20 @@ namespace _3DScanning
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public FrameDescription ColorFrameDescription
+        {
+            get
+            {
+                return this.colorFrameDescription;
+            }
+        }
+
+        /// <summary>
         /// Gets the coordinate mapper
         /// </summary>
-        public CoordinateMapper Mapper
+        public CoordinateMapper CoordinateMapper
         {
             get
             {
@@ -102,27 +125,30 @@ namespace _3DScanning
         /// <summary>
         /// Gets kinect attributes
         /// </summary>
-        public KinectAttributes Attributes
+        public KinectAttributes KinectAttributes
         {
             get
             {
-                return this.kinectAtt;
+                return this.kinectAttributes;
             }
         }
 
-        public EventHandler<DepthFrameArrivedEventArgs> EventHandler
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventHandler"></param>
+        public void AddEventHandler(EventHandler<MultiSourceFrameArrivedEventArgs> eventHandler)
         {
-            get
-            {
-                return this.eventHandler;
-            }
+            this.multiSourceFrameReader.MultiSourceFrameArrived += eventHandler;
+        }
 
-            set
-            {
-                this.depthFrameReader.FrameArrived -= this.eventHandler;
-                this.depthFrameReader.FrameArrived += value;
-                this.eventHandler = value;
-            }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventHandler"></param>
+        public void RemoveEventHandler(EventHandler<MultiSourceFrameArrivedEventArgs> eventHandler)
+        {
+            this.multiSourceFrameReader.MultiSourceFrameArrived -= eventHandler;
         }
 
         /// <summary>
@@ -146,7 +172,7 @@ namespace _3DScanning
                 this.kinectSensor.Open();
             }
         }
-        
+
         /// <summary>
         /// Implementation of the IDisposable interface, it releases resources
         /// </summary>
@@ -155,23 +181,23 @@ namespace _3DScanning
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         /// <summary>
         /// Releases resources
         /// </summary>
         /// <param name="disposing">Indicates which resources should be released, true -> all resources, false -> unmanaged resources</param>
         protected virtual void Dispose(bool disposing)
         {
-            if(this.kinectSensor!= null)
+            if (this.kinectSensor != null)
             {
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
             }
-            if (this.depthFrameReader != null)
+            if (this.multiSourceFrameReader != null)
             {
-                this.depthFrameReader.Dispose();
-                this.depthFrameReader = null;
+                this.multiSourceFrameReader.Dispose();
+                this.multiSourceFrameReader = null;
             }
-        }  
+        }
     }
 }

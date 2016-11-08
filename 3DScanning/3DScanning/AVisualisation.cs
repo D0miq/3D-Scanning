@@ -1,42 +1,119 @@
-﻿using Microsoft.Kinect;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+
+using Microsoft.Kinect;
 using System.Threading.Tasks;
 
 namespace _3DScanning
 {
+    /// <summary>
+    /// 
+    /// </summary>
     abstract class AVisualisation
     {
+
+        public delegate void FinishedHandler(bool state);
+
+        public event FinishedHandler FinishedEvent;
+
         /// <summary>
         /// Kinect sensor
         /// </summary>
-        protected KinectDepthSensor kinect;
+        protected Kinect kinect;
 
         /// <summary>
         /// Kinect attributes
         /// </summary>
         protected KinectAttributes kinectAttributes;
 
-        /// <summary>
-        /// Number of pixel in depth frames
-        /// </summary>
-        protected uint depthFrameLength;
+        protected FrameDescription colorFrameDescription;
 
+        protected FrameDescription depthFrameDescription;
+
+        private object locker = new object();
+
+        /// <summary>
+        /// 
+        /// </summary>
         public AVisualisation()
         {
-            this.kinect = KinectDepthSensor.GetInstance();
-            this.kinectAttributes = this.kinect.Attributes;
-            this.depthFrameLength = this.kinect.Description.LengthInPixels;
-            this.kinect.EventHandler = this.Reader_FrameArrived;
-
-
+            this.kinect = Kinect.GetInstance();
+            this.kinectAttributes = this.kinect.KinectAttributes;
+            this.colorFrameDescription = this.kinect.ColorFrameDescription;
+            this.depthFrameDescription = this.kinect.DepthFrameDescription;
+            this.kinect.AddEventHandler(this.Reader_FrameArrived);
         }
 
-        public abstract void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Reader_FrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
+        {
+            try {
+                MultiSourceFrame multiSourceFrame = e.FrameReference.AcquireFrame();
+            
+                if (multiSourceFrame != null)
+                {
+                    lock (this.locker)
+                    {
+                        this.ProcessFrame(multiSourceFrame);
+                    }
+                }
+            }catch
+            {
 
-        public KinectDepthSensor Kinect
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        protected void OnFinishedChanged(bool state)
+        {
+            if(this.FinishedEvent != null)
+            {
+                this.FinishedEvent(state);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="multiSourceFrame"></param>
+        protected abstract void ProcessFrame(MultiSourceFrame multiSourceFrame);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="depthData"></param>
+        protected void ReduceDepthRange(ushort[] depthData)
+        {
+            this.ReduceDepthRange(depthData, new byte[depthData.Length]);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="depthData"></param>
+        /// <param name="colorData"></param>
+        protected void ReduceDepthRange(ushort[] depthData, byte[] colorData)
+        {
+            for (int i = 0; i < depthData.Length; i++)
+            {
+                if (depthData[i] >this.kinectAttributes.MaxDepth || depthData[i] < this.kinectAttributes.MinDepth)
+                {
+                    depthData[i] = 0;
+                    colorData[i] = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Kinect Kinect
         {
             get
             {
@@ -44,6 +121,9 @@ namespace _3DScanning
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public KinectAttributes KinectAttributes
         {
             get

@@ -81,9 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APointCloudVisualisation.cs" />
+    <Compile Include="ASingleMeshGenerator.cs" />
     <Compile Include="AVisualisation.cs" />
-    <Compile Include="ColorfulGenerator.cs" />
-    <Compile Include="ColorlessGenerator.cs" />
+    <Compile Include="ColoredMeshGenerator.cs" />
+    <Compile Include="ScaledMeshGenerator.cs" />
+    <Compile Include="ColorlessMeshGenerator.cs" />
     <Compile Include="DepthFrameVisualisation.cs" />
     <Compile Include="Form.cs">
       <SubType>Form</SubType>
@@ -91,12 +93,13 @@
     <Compile Include="Form.Designer.cs">
       <DependentUpon>Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="APointCloudGenerator.cs" />
+    <Compile Include="AMeshGenerator.cs" />
     <Compile Include="ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Kinect.cs" />
     <Compile Include="KinectAttributes.cs" />
+    <Compile Include="MultiMeshesGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PointCloudRenderer.cs" />
@@ -113,6 +116,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="ClassDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

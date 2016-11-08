@@ -1,7 +1,5 @@
 ﻿using System;
 using Microsoft.Kinect;
-using System.Windows.Forms;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows;
 
@@ -14,68 +12,70 @@ namespace _3DScanning
         /// </summary>
         private const int MAP_DEPTH_TO_BYTE = 8000 / 256;
 
-        private WriteableBitmap image;
+        /// <summary>
+        /// 
+        /// </summary>
+        private WriteableBitmap writeableBitmap;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private byte[] depthPixels;
 
-        public DepthFrameVisualisation(WriteableBitmap image)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writeableBitmap"></param>
+        public DepthFrameVisualisation(WriteableBitmap writeableBitmap)
         {
-            this.image = image;
-            this.depthPixels = new byte[this.depthFrameLength];
-        }
-
-        public override void Reader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
-        {
-            using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
-            {
-                if (depthFrame != null)
-                {
-                    using (KinectBuffer depthBuffer = depthFrame.LockImageBuffer())
-                    {
-                        this.ProcessDepthFrameData(depthBuffer.UnderlyingBuffer, depthBuffer.Size, this.kinectAttributes.MinDepth, this.kinectAttributes.MaxDepth);
-                        this.RenderDepthPixels();
-                    }
-                }
-            }
+            this.writeableBitmap = writeableBitmap;
+            this.depthPixels = new byte[this.depthFrameDescription.LengthInPixels];
         }
 
         /// <summary>
-        /// Directly accesses the underlying image buffer of the DepthFrame to 
-        /// create a displayable bitmap.
-        /// This function requires the /unsafe compiler option as we make use of direct
-        /// access to the native memory pointed to by the depthFrameData pointer.
+        /// 
         /// </summary>
-        /// <param name="depthFrameData">Pointer to the DepthFrame image data</param>
-        /// <param name="depthFrameDataSize">Size of the DepthFrame image data</param>
-        /// <param name="minDepth">The minimum reliable depth value for the frame</param>
-        /// <param name="maxDepth">The maximum reliable depth value for the frame</param>
-        private unsafe void ProcessDepthFrameData(IntPtr depthFrameData, uint depthFrameDataSize, int minDepth, int maxDepth)
+        /// <param name="multiSourceFrame"></param>
+        protected override void ProcessFrame(MultiSourceFrame multiSourceFrame)
         {
-            // depth frame data is a 16 bit value
-            ushort* frameData = (ushort*)depthFrameData;
-
-            // convert depth to a visual representation
-            for (int i = 0; i < (int)(depthFrameDataSize / this.kinect.Description.BytesPerPixel); ++i)
+            ushort[] depthData;
+            DepthFrameReference depthFrameReference = multiSourceFrame.DepthFrameReference;
+            
+            using (DepthFrame depthFrame = depthFrameReference.AcquireFrame())
             {
-                // Get the depth for this pixel
-                ushort depth = frameData[i];
+                if (depthFrame == null)
+                    return;
 
-                // To convert to a byte, we're mapping the depth value to the byte range.
-                // Values outside the reliable depth range are mapped to 0 (black).
-                this.depthPixels[i] = (byte)(depth >= minDepth && depth <= maxDepth ? (depth / MAP_DEPTH_TO_BYTE) : 0);
+                depthData = new ushort[this.depthFrameDescription.LengthInPixels];
+                depthFrame.CopyFrameDataToArray(depthData);
             }
+           this.ReduceDepthRange(depthData);
+           this.ConvertDepthToColor(depthData);
+           this.Render();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="depthData"></param>
+        private void ConvertDepthToColor(ushort[] depthData)
+        {
+            for(int i = 0; i < depthData.Length; i++)
+            {
+                ushort depth = depthData[i];
+                this.depthPixels[i] = (byte)(depth >= this.kinectAttributes.MinDepth && depth <= this.kinectAttributes.MaxDepth ? (depth / MAP_DEPTH_TO_BYTE) : 0);
+            }
+        }
 
         /// <summary>
         /// Renders color pixels into the writeableBitmap.
         /// </summary>
-        private void RenderDepthPixels()
+        private void Render()
         {
-            this.image.WritePixels(
-                new Int32Rect(0, 0, this.image.PixelWidth, this.image.PixelHeight),
+            this.writeableBitmap.WritePixels(
+                new Int32Rect(0, 0, this.writeableBitmap.PixelWidth, this.writeableBitmap.PixelHeight),
                 this.depthPixels,
-                this.image.PixelWidth,
+                this.writeableBitmap.PixelWidth,
                 0);
         }
     }

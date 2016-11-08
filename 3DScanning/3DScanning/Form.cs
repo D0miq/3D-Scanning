@@ -1,21 +1,32 @@
-﻿using Microsoft.Kinect;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using OpenTKLib;
-using OpenTK;
+﻿using System;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using Microsoft.Kinect;
 
 namespace _3DScanning
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class Form : System.Windows.Forms.Form
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private AVisualisation visualisation;
 
-        private WriteableBitmap bitmap;
+        /// <summary>
+        /// 
+        /// </summary>
+        private WriteableBitmap writeableBitmap;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private EventHandler<MultiSourceFrameArrivedEventArgs> eventHandler;
+
+        private string path;
 
         /// <summary>
         /// Creates form and inicialize kinect sensor, kinect attributes and camera space points
@@ -23,9 +34,10 @@ namespace _3DScanning
         public Form()
         {
             InitializeComponent();
-            this.visualisation = new ColorfulGenerator(this.progressBar, this.statusLB);
-            this.bitmap = new WriteableBitmap(this.visualisation.Kinect.Description.Width, this.visualisation.Kinect.Description.Height, 96.0, 96.0, PixelFormats.Gray8, null);
-            this.DataBinding();  
+            this.visualisation = new PointCloudRenderer(this.viewport, this.statusLB);
+            this.writeableBitmap = new WriteableBitmap(this.visualisation.Kinect.DepthFrameDescription.Width, this.visualisation.Kinect.DepthFrameDescription.Height, 96.0, 96.0, PixelFormats.Gray8, null);
+            this.DataBinding();
+            this.visualisation.Kinect.Start();
         }
 
         /// <summary>
@@ -41,14 +53,19 @@ namespace _3DScanning
         }
 
         /// <summary>
-        /// Disables or enables controls that adjust kinect attributes
+        /// 
         /// </summary>
-        /// <param name="state">Defines if controls are disable or enable</param>
+        /// <param name="state"></param>
         private void DisableControls(bool state)
         {
             this.minDepthTB.Enabled = !state;
             this.maxDepthTB.Enabled = !state;
             this.interpolationTB.Enabled = !state;
+            this.colorlessMeshRB.Enabled = !state;
+            this.coloredMeshRB.Enabled = !state;
+            this.scaledMeshRB.Enabled = !state;
+            this.generateAllCB.Enabled = !state;
+            this.generateBT.Enabled = !state;
         }
 
         /// <summary>
@@ -56,15 +73,14 @@ namespace _3DScanning
         /// </summary>
         private void DataBinding()
         {
-            this.minDepthTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.maxDepthTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.minDepthValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "MinDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.maxDepthValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "MaxDepth", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.interpolationValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.interpolationTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.progressBar.DataBindings.Add("Maximum", this.visualisation.KinectAttributes, "Interpolation", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.generateAllCB.DataBindings.Add("Checked", this.visualisation.KinectAttributes, "GenerateAll", false, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            this.imageControl.image.Source = this.bitmap;
+            this.minDepthTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "MinDepth", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.minDepthValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "MinDepth", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationValueLB.DataBindings.Add("Text", this.visualisation.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationTB.DataBindings.Add("Value", this.visualisation.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.progressBar.DataBindings.Add("Maximum", this.visualisation.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.imageControl.image.Source = this.writeableBitmap;
         }
 
         /// <summary>
@@ -74,19 +90,38 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void GenerateBT_Click(object sender, EventArgs e)
         {
-
-            if (!(this.visualisation is ColorfulGenerator) && this.colorCB.Checked)
+            if(path == null)
             {
-                this.visualisation = new ColorfulGenerator(this.progressBar, this.statusLB);
-            }else if(!(this.visualisation is ColorlessGenerator) && !this.colorCB.Checked)
-            {
-                this.visualisation = new ColorlessGenerator(this.progressBar, this.statusLB);
+                FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                folderBrowserDialog.ShowDialog();
+                this.path = folderBrowserDialog.SelectedPath;
             }
+
+            this.DisableControls(true);
             this.statusLB.Text = "Probíhá generování meshe!";
-            //this.DisableControls(true);
-            this.progressBar.Show();
-            this.visualisation.Kinect.Start();
-            
+
+            if (this.coloredMeshRB.Checked)
+            {
+                this.visualisation = new ColoredMeshGenerator(this.progressBar, this.statusLB, this.path);
+                this.visualisation.FinishedEvent += this.DisableControls;
+            }
+            else if (this.colorlessMeshRB.Checked)
+            { 
+                this.visualisation = new ColorlessMeshGenerator(this.progressBar, this.statusLB, this.path);
+                this.visualisation.FinishedEvent += this.DisableControls;
+            }
+            else
+            {
+                this.visualisation = new ScaledMeshGenerator(this.progressBar, this.statusLB, this.path);
+                this.visualisation.FinishedEvent += this.DisableControls;
+            }
+
+            if (this.generateAllCB.Checked)
+            {
+                this.visualisation = new MultiMeshesGenerator(this.path);
+            }
+
+            this.progressBar.Show();          
         }
 
         /// <summary>
@@ -96,31 +131,26 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void PreviewBT_Click(object sender, EventArgs e)
         {
-            if (!(this.visualisation is PointCloudRenderer))
-            {
-                this.visualisation = new PointCloudRenderer(this.viewport, this.statusLB);
-                this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
-            }
+            this.visualisation = new PointCloudRenderer(this.viewport, this.statusLB);      
             this.statusLB.Text = "Probíhá vytvoření náhledu!";
-            //this.DisableControls(true);
-            this.visualisation.Kinect.Start();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             int tabIndex = (sender as TabControl).SelectedIndex;
             if(tabIndex == 1)
             {
-                if (!(this.visualisation is DepthFrameVisualisation))
-                {
-                    this.visualisation = new DepthFrameVisualisation(this.bitmap);
-                    this.visualisation.Kinect.EventHandler = this.visualisation.Reader_FrameArrived;
-                }
-                this.visualisation.Kinect.Start();
+                this.visualisation = new DepthFrameVisualisation(this.writeableBitmap);
+                this.eventHandler = this.visualisation.Reader_FrameArrived;
             }
             else
             {
-                this.visualisation.Kinect.Stop();
+                this.visualisation.Kinect.RemoveEventHandler(this.eventHandler);
             }
         }
     }
