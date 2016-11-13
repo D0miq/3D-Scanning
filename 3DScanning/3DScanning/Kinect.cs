@@ -123,7 +123,7 @@ namespace _3DScanning
         }
 
         /// <summary>
-        /// Gets kinect attributes
+        /// Gets the coordinate mapper
         /// </summary>
         public KinectAttributes KinectAttributes
         {

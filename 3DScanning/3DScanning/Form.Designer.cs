@@ -1,4 +1,6 @@
-﻿namespace _3DScanning
+﻿using System;
+
+namespace _3DScanning
 {
     partial class Form
     {
@@ -32,7 +34,6 @@
             this.minDepthLB = new System.Windows.Forms.Label();
             this.previewBT = new System.Windows.Forms.Button();
             this.generateBT = new System.Windows.Forms.Button();
-            this.generateAllCB = new System.Windows.Forms.CheckBox();
             this.colorlessMeshRB = new System.Windows.Forms.RadioButton();
             this.scaledMeshRB = new System.Windows.Forms.RadioButton();
             this.coloredMeshRB = new System.Windows.Forms.RadioButton();
@@ -44,14 +45,15 @@
             this.minDepthValueLB = new System.Windows.Forms.Label();
             this.maxDepthValueLB = new System.Windows.Forms.Label();
             this.interpolationTB = new System.Windows.Forms.TrackBar();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.statusLB = new System.Windows.Forms.Label();
+            this.generateAllCB = new System.Windows.Forms.CheckBox();
             this.viewport = new OpenTKLib.OGLControl();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPointCloud = new System.Windows.Forms.TabPage();
             this.tabDepthFrame = new System.Windows.Forms.TabPage();
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             this.imageControl = new _3DScanning.ImageControl();
+            this.dispersionCB = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
@@ -72,8 +74,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel1.Controls.Add(this.minDepthLB, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.previewBT, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.generateBT, 1, 10);
-            this.tableLayoutPanel1.Controls.Add(this.generateAllCB, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.generateBT, 1, 11);
             this.tableLayoutPanel1.Controls.Add(this.colorlessMeshRB, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.scaledMeshRB, 2, 7);
             this.tableLayoutPanel1.Controls.Add(this.coloredMeshRB, 4, 7);
@@ -85,8 +86,9 @@
             this.tableLayoutPanel1.Controls.Add(this.minDepthValueLB, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.maxDepthValueLB, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.interpolationTB, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.progressBar, 1, 9);
-            this.tableLayoutPanel1.Controls.Add(this.statusLB, 0, 11);
+            this.tableLayoutPanel1.Controls.Add(this.statusLB, 0, 12);
+            this.tableLayoutPanel1.Controls.Add(this.dispersionCB, 2, 9);
+            this.tableLayoutPanel1.Controls.Add(this.generateAllCB, 1, 8);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -100,9 +102,10 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(250, 517);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -131,28 +134,13 @@
             // generateBT
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.generateBT, 4);
-            this.generateBT.Location = new System.Drawing.Point(44, 440);
+            this.generateBT.Location = new System.Drawing.Point(44, 460);
             this.generateBT.Name = "generateBT";
             this.generateBT.Size = new System.Drawing.Size(158, 34);
             this.generateBT.TabIndex = 1;
             this.generateBT.Text = "Generovat mesh";
             this.generateBT.UseVisualStyleBackColor = true;
             this.generateBT.Click += new System.EventHandler(this.GenerateBT_Click);
-            // 
-            // generateAllCB
-            // 
-            this.generateAllCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.generateAllCB.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.generateAllCB, 4);
-            this.generateAllCB.Location = new System.Drawing.Point(44, 263);
-            this.generateAllCB.Name = "generateAllCB";
-            this.generateAllCB.Size = new System.Drawing.Size(158, 34);
-            this.generateAllCB.TabIndex = 20;
-            this.generateAllCB.Text = "Generovat všechny frame";
-            this.generateAllCB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.generateAllCB.UseVisualStyleBackColor = true;
             // 
             // colorlessMeshRB
             // 
@@ -290,7 +278,8 @@
             this.tableLayoutPanel1.SetColumnSpan(this.interpolationTB, 6);
             this.interpolationTB.LargeChange = 10;
             this.interpolationTB.Location = new System.Drawing.Point(3, 193);
-            this.interpolationTB.Maximum = 1000;
+            if (Environment.Is64BitProcess) { this.interpolationTB.Maximum = 500; }
+            else { this.interpolationTB.Maximum = 100; }
             this.interpolationTB.Minimum = 1;
             this.interpolationTB.Name = "interpolationTB";
             this.interpolationTB.Size = new System.Drawing.Size(244, 24);
@@ -298,27 +287,30 @@
             this.interpolationTB.TickStyle = System.Windows.Forms.TickStyle.None;
             this.interpolationTB.Value = 1;
             // 
-            // progressBar
-            // 
-            this.progressBar.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 4);
-            this.progressBar.Location = new System.Drawing.Point(44, 411);
-            this.progressBar.MarqueeAnimationSpeed = 1;
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(158, 23);
-            this.progressBar.Step = 1;
-            this.progressBar.TabIndex = 19;
-            this.progressBar.Visible = false;
-            // 
             // statusLB
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.statusLB, 6);
-            this.statusLB.Location = new System.Drawing.Point(3, 480);
+            this.statusLB.Location = new System.Drawing.Point(3, 500);
             this.statusLB.Margin = new System.Windows.Forms.Padding(3);
             this.statusLB.Name = "statusLB";
-            this.statusLB.Size = new System.Drawing.Size(244, 34);
+            this.statusLB.Size = new System.Drawing.Size(244, 14);
             this.statusLB.TabIndex = 14;
             this.statusLB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // generateAllCB
+            // 
+            this.generateAllCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.generateAllCB.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.generateAllCB, 4);
+            this.generateAllCB.Location = new System.Drawing.Point(44, 263);
+            this.generateAllCB.Name = "generateAllCB";
+            this.generateAllCB.Size = new System.Drawing.Size(158, 34);
+            this.generateAllCB.TabIndex = 20;
+            this.generateAllCB.Text = "Generovat všechny frame";
+            this.generateAllCB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.generateAllCB.UseVisualStyleBackColor = true;
             // 
             // viewport
             // 
@@ -375,6 +367,20 @@
             this.elementHost.Text = "elementHost";
             this.elementHost.Child = this.imageControl;
             // 
+            // dispersionCB
+            // 
+            this.dispersionCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dispersionCB.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.dispersionCB, 2);
+            this.dispersionCB.Location = new System.Drawing.Point(85, 303);
+            this.dispersionCB.Name = "dispersionCB";
+            this.dispersionCB.Size = new System.Drawing.Size(76, 34);
+            this.dispersionCB.TabIndex = 28;
+            this.dispersionCB.Text = "Rozptyl";
+            this.dispersionCB.UseVisualStyleBackColor = true;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -410,7 +416,6 @@
         private System.Windows.Forms.Label statusLB;
         private System.Windows.Forms.Label interpolationLB;
         private System.Windows.Forms.TrackBar interpolationTB;
-        private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.CheckBox generateAllCB;
         private OpenTKLib.OGLControl viewport;
         private System.Windows.Forms.TabControl tabControl;
@@ -423,6 +428,7 @@
         private System.Windows.Forms.RadioButton colorlessMeshRB;
         private System.Windows.Forms.Label maxDepthValueLB;
         private System.Windows.Forms.Label interpolationValueLB;
+        private System.Windows.Forms.CheckBox dispersionCB;
     }
 }
 

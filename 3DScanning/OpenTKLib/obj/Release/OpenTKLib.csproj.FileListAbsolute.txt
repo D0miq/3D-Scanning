@@ -1,0 +1,16 @@
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\bin\Release\OpenTKLib.dll.config
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\bin\Release\OpenTKLib.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\bin\Release\OpenTKLib.pdb
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\bin\Release\OpenTK.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\bin\Release\OpenTK.GLControl.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.csprojResolveAssemblyReference.cache
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.AboutForm.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.SettingsForm.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.MultipleOGLControls.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.OpenTKForm.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.FastGLControl.OpenTKFormAlternative.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.Properties.Resources.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.OpenGLUC.resources
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.csproj.GenerateResource.Cache
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.dll
+J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Release\OpenTKLib.pdb
