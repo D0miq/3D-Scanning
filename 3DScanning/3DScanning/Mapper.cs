@@ -12,6 +12,9 @@ namespace _3DScanning
         private List<int[]> triangleList;
         private int[] indices;
         private int freeIndex = 0;
+        private int depthWidth = Kinect.GetInstance().DepthFrameDescription.Width;
+        private int depthHeight = Kinect.GetInstance().DepthFrameDescription.Height;
+
 
         public List<int[]> TriangleList
         {
@@ -20,6 +23,7 @@ namespace _3DScanning
                 return this.triangleList;
             }
         }
+
 
         public Mapper()
         {
@@ -32,7 +36,7 @@ namespace _3DScanning
         /// <param name="depthHeight"> Height of the depth frame </param>
         /// <param name="depthWidth"> Width of the depth frame </param>
         /// <returns> Array of transformed points </returns>
-        public void CameraToWorldTransfer(int depthWidth, int depthHeight, CameraSpacePoint[] cameraSpacePoints)
+        public void CameraToWorldTransfer(CameraSpacePoint[] cameraSpacePoints)
         {
             bool[] used = new bool[depthHeight * depthWidth];
 
@@ -101,10 +105,10 @@ namespace _3DScanning
                 }         
         }
 
-        public R[] Reorder<R>(R[] points, int depthWidth, int depthHeight)
+        public R[] Reorder<R>(R[] points)
         {
             R[] reordered = new R[freeIndex];
-            for (int i = 0; i < (depthWidth * depthHeight); i++)
+            for (int i = 0; i < depthHeight * depthWidth; i++)
             {
                 if (indices[i] > 0)
                     reordered[indices[i]] = points[i];

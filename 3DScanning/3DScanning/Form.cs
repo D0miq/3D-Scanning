@@ -26,9 +26,9 @@ namespace _3DScanning
 
         private object locker;
 
-        private Boolean generating = false;
+        private bool generating = false;
 
-        private Boolean previewing = false;
+        private bool previewing = false;
 
         private int tabIndex = 0;
 
@@ -48,7 +48,7 @@ namespace _3DScanning
             this.kinect.AddEventHandler(this.Reader_FrameArrived);
             this.depthData = new DepthData();
             this.colorData = new ColorData();
-            this.visualisation = new Visualisation();
+            this.visualisation = new Visualisation(this.depthData, this.colorData);
             this.writeableBitmap = new WriteableBitmap(kinect.DepthFrameDescription.Width, kinect.DepthFrameDescription.Height, 96.0, 96.0, PixelFormats.Gray8, null);
             this.locker = new object();
             this.DataBinding();
@@ -94,6 +94,18 @@ namespace _3DScanning
             this.maxDepthValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
             this.interpolationValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
             this.interpolationTB.DataBindings.Add("Value", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.scaledMeshRB.CheckedChanged += delegate (object sender, EventArgs e) {
+                if (scaledMeshRB.Checked)
+                {
+                    dispersionCB.Checked = true;
+                    dispersionCB.Enabled = false;
+
+                } else
+                {
+                    dispersionCB.Checked = false;
+                    dispersionCB.Enabled = true;
+                }
+            };
             this.imageControl.image.Source = this.writeableBitmap;
         }
 
@@ -114,34 +126,34 @@ namespace _3DScanning
                     //
                     if (this.tabIndex == 1)
                     {
-                        this.visualisation.VisualiseDepth(this.depthData, this.writeableBitmap);
+                        this.visualisation.VisualiseDepth(this.writeableBitmap);
                     }
                     else if (this.previewing)
                     {
-                        this.visualisation.VisualisePointCloud(this.depthData, this.viewport);
+                        this.visualisation.VisualisePointCloud(this.viewport);
                         this.previewing = false;
                         this.statusLB.Text = "Náhled byl zobrazen.";
                     }
-                    //
-                    if (this.generating && this.generateAllCB.Checked)
-                    {
-                        this.visualisation.CreateCleanMesh(this.depthData);
-                        this.visualisation.GenerateMesh();
-                    }
-                    Console.WriteLine(this.depthData.Data.Count + ", " + this.colorData.Data.Count);
+
+
                     //
                     if (this.generating && this.kinect.KinectAttributes.Interpolation <= this.depthData.Data.Count && this.kinect.KinectAttributes.Interpolation <= this.colorData.Data.Count)
                     {
-                        Dispersion dispersion = new Dispersion(depthData.Data);
-                        CameraSpacePoint[] cleanInterpolatedMesh = this.visualisation.CreateCleanInterpolatedMesh(this.depthData);
+                        if ( this.generateAllCB.Checked)
+                        {
+                            this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation);
+                        }
+
+                        Dispersion dispersion = new Dispersion(depthData.Data.GetRange(this.kinect.KinectAttributes.Interpolation));
+                        ushort[] interpolatedMesh = this.visualisation.CreateCleanInterpolatedMesh();
                         if (dispersionCB.Checked)
                         {
-                            dispersion.CreateDispersions(cleanInterpolatedMesh);
-                            this.visualisation.CreateScaledMesh(dispersion);
+                            dispersion.CreateDispersions(interpolatedMesh);
+                            this.visualisation.AddDispersion(dispersion);
                         }
-                        if (this.coloredMeshRB.Checked) { this.visualisation.CreateColorMesh(colorData); }
-                        else if (this.scaledMeshRB.Checked) { this.visualisation.CreateScaledMesh(dispersion); }
-                        this.visualisation.GenerateMesh();
+                        if (this.coloredMeshRB.Checked) { this.visualisation.CreateColorMesh(); }
+                        else if (this.scaledMeshRB.Checked) { this.visualisation.CreateScaledMesh(); }
+                        this.visualisation.GenerateMesh(path+"\\points.obj", false, true);
                         this.generating = false;
                         this.DisableControls(false);
                         this.statusLB.Text = "Mesh byl vygenerován a uložen.";
@@ -150,6 +162,7 @@ namespace _3DScanning
             }
             catch
             {
+                this.statusLB.Text = "Vyskytla se chyba. Prosím restartujte aplikaci.";
             }
         }
 
@@ -166,7 +179,8 @@ namespace _3DScanning
                 folderBrowserDialog.ShowDialog();
                 this.path = folderBrowserDialog.SelectedPath;
             }
-
+            this.visualisation.Clear();
+            if (generateAllCB.Checked) { this.visualisation.GenerateMesh(path + "\\allFrames.obj", false, false); }           
             this.statusLB.Text = "Probíhá generování meshe!";
             this.DisableControls(true);
             this.generating = true;

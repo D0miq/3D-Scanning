@@ -126,27 +126,29 @@ namespace OpenTKLib
 
         protected override void OnResize(EventArgs e)
         {
-            if (!GLSettings.DesignMode)
-            //if (!DesignMode)
+            if (GLrender != null)
             {
-                this.GLrender.Camera.PerspectiveUpdate(this.Width, this.Height);
-                //program["projection_matrix"].SetValue(p);
-
-                if (this.GLrender.GLContextInitialized)
+                if (!GLSettings.DesignMode)
+                //if (!DesignMode)
                 {
+                    this.GLrender.Camera.PerspectiveUpdate(this.Width, this.Height);
+                    //program["projection_matrix"].SetValue(p);
 
-                    if (this.Width < 0)
-                        this.Width = 1;
-                    if (this.Height < 0)
-                        this.Height = 1;
-                    this.MakeCurrent();
-                    GL.Viewport(0, 0, this.Width, this.Height);
-                    this.Invalidate();
+                    if (this.GLrender.GLContextInitialized)
+                    {
+
+                        if (this.Width < 0)
+                            this.Width = 1;
+                        if (this.Height < 0)
+                            this.Height = 1;
+                        this.MakeCurrent();
+                        GL.Viewport(0, 0, this.Width, this.Height);
+                        this.Invalidate();
 
 
+                    }
                 }
             }
-
             base.OnResize(e);
         }
 

@@ -11,7 +11,7 @@ namespace _3DScanning
         private R[] array;
         private int top = 0;
         private static int maxLength;
-        private Boolean isFull = false;
+        private bool isFull = false;
 
         public R[] IterableData
         {
@@ -37,12 +37,13 @@ namespace _3DScanning
             array = new R[maxLength];
         }
 
-        public CircularStack(int length)
+        private CircularStack(int length)
         {
-            if (length <= maxLength) { array = new R[length]; }
+            if (length <= maxLength) {
+                array = new R[length]; }
         }
 
-        public Boolean IsEmpty()
+        public bool IsEmpty()
         {
             return (top == 0) && (!isFull);
         }

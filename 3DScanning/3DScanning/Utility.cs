@@ -63,10 +63,9 @@ namespace _3DScanning
         /// </summary>
         public static Color[] GetColorsFromRGBA(byte[] colorValues, int bytesPerPixel)
         {
-            int length = colorValues.Length;
-            Color[] colors = new Color[length];
+            Color[] colors = new Color[colorValues.Length/bytesPerPixel];
             int k = 0;
-            for (int i = 0; i < length; i += bytesPerPixel)
+            for (int i = 0; i < colorValues.Length; i += bytesPerPixel)
             {
                 colors[k] = Color.FromArgb(colorValues[i + 3], colorValues[i], colorValues[i + 1], colorValues[i + 2]);
                 k++;

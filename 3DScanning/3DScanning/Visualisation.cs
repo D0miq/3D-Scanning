@@ -4,8 +4,11 @@ using OpenTKLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Linq;
 using System.Windows.Media.Imaging;
 
 namespace _3DScanning
@@ -13,7 +16,7 @@ namespace _3DScanning
     /// <summary>
     /// 
     /// </summary>
-    class Visualisation
+    class Visualisation : IDisposable
     { 
 
         private CameraSpacePoint[] cameraSpacePoints;
@@ -36,10 +39,16 @@ namespace _3DScanning
 
         private float[] reorderedDispersion;
 
+        private NumberFormatInfo numberFormatInfo;
+
+        private DepthData depthData;
+
+        private ColorData colorData;
+
         /// <summary>
         /// 
         /// </summary>
-        public Visualisation()
+        public Visualisation(DepthData depthData, ColorData colorData)
         {
             this.kinect = Kinect.GetInstance();
             this.depthFrameDescription = this.kinect.DepthFrameDescription;
@@ -48,6 +57,11 @@ namespace _3DScanning
             this.colorSpacePoints = new ColorSpacePoint[this.depthFrameDescription.LengthInPixels];
             this.model = new PointCloudRenderable();
             this.mapper = new Mapper();
+            this.depthData = depthData;
+            this.colorData = colorData;
+            this.numberFormatInfo = new NumberFormatInfo();
+            numberFormatInfo.NumberDecimalSeparator = ".";
+            numberFormatInfo.NumberDecimalDigits = 10;
         }
 
         /// <summary>
@@ -56,7 +70,7 @@ namespace _3DScanning
         /// <param name="depthData"></param>
         /// <param name="depthValues"></param>
         /// <param name="writeableBitmap"></param>
-        public void VisualiseDepth(DepthData depthData, WriteableBitmap writeableBitmap)
+        public void VisualiseDepth(WriteableBitmap writeableBitmap)
         {
             ushort[] depthValues = depthData.ReduceDepthRange(depthData.LastData);
             byte[] depthColors = Utility.GetColorFromDepth(depthValues);
@@ -73,9 +87,9 @@ namespace _3DScanning
         /// <param name="depthData"></param>
         /// <param name="depthValues"></param>
         /// <param name="viewport"></param>
-        public void VisualisePointCloud(DepthData depthData, OGLControl viewport)
+        public void VisualisePointCloud(OGLControl viewport)
         {
-            CameraSpacePoint[] reorederedPoints = this.CreateCleanMesh(depthData);
+            CameraSpacePoint[] reorederedPoints = this.CreateCleanMesh(depthData.LastData);
             List<Vector3> vectorList = new List<Vector3>();
 
             foreach (CameraSpacePoint point in reorederedPoints)
@@ -93,12 +107,12 @@ namespace _3DScanning
         /// <param name="depthData"></param>
         /// <param name="depthValues"></param>
         /// <returns></returns>
-        public CameraSpacePoint[] CreateCleanMesh(DepthData depthData)
+        public CameraSpacePoint[] CreateCleanMesh(ushort[] depthValues)
         {
-            ushort[] depthValues = depthData.ReduceDepthRange(depthData.LastData);
-            this.kinect.CoordinateMapper.MapDepthFrameToCameraSpace(depthValues, this.cameraSpacePoints);
-            this.mapper.CameraToWorldTransfer(this.depthFrameDescription.Width, this.depthFrameDescription.Height, this.cameraSpacePoints);
-            this.reorderedPoints = this.mapper.Reorder<CameraSpacePoint>(cameraSpacePoints, this.depthFrameDescription.Width, this.depthFrameDescription.Height);
+            ushort[] reducedValues = depthData.ReduceDepthRange(depthValues);
+            this.kinect.CoordinateMapper.MapDepthFrameToCameraSpace(reducedValues, this.cameraSpacePoints);
+            this.mapper.CameraToWorldTransfer(this.cameraSpacePoints);
+            this.reorderedPoints = this.mapper.Reorder<CameraSpacePoint>(cameraSpacePoints);
             return reorderedPoints;
         }
 
@@ -107,67 +121,154 @@ namespace _3DScanning
         /// </summary>
         /// <param name="depthData"></param>
         /// <returns></returns>
-        public CameraSpacePoint[] CreateCleanInterpolatedMesh(DepthData depthData)
+        public ushort[] CreateCleanInterpolatedMesh()
         {
             ushort[] interpolatedDepths = depthData.InterpolateDepths();
-            ushort[] depthValues = depthData.ReduceDepthRange(interpolatedDepths);
-            this.kinect.CoordinateMapper.MapDepthFrameToCameraSpace(depthValues, this.cameraSpacePoints);
-            this.mapper.CameraToWorldTransfer(this.depthFrameDescription.Width, this.depthFrameDescription.Height, this.cameraSpacePoints);
-            this.reorderedPoints = this.mapper.Reorder<CameraSpacePoint>(cameraSpacePoints, this.depthFrameDescription.Width, this.depthFrameDescription.Height);
-            return this.reorderedPoints;
+            CreateCleanMesh(interpolatedDepths);
+            return interpolatedDepths;
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="numberOfFrames"></param>
+        public void CreatePointsFromAllFrames(String path, int numberOfFrames)
+        {              
+            foreach(ushort[] frame in depthData.Data.GetRange(numberOfFrames).IterableData)
+            {
+                CreateCleanMesh(frame);
+                GenerateMesh(path + "\\allFrames.obj", true, false);
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dispersion"></param>
-        public void CreateScaledMesh(Dispersion dispersion)
+        public void CreateScaledMesh()
         {
-            Color[] colors = new Color[dispersion.PixelsDispersion.Length];
-
-            for(int i = 0; i< dispersion.PixelsDispersion.Length; i++)
+            Color[] colors = new Color[this.reorderedDispersion.Length];
+            float min = this.reorderedDispersion.Min();
+            float max = this.reorderedDispersion.Max();
+            for (int i = 0; i< this.reorderedDispersion.Length; i++)
             {
-                colors[i] = Utility.GetScaledColor(dispersion.PixelsDispersion[i], dispersion.MinDispersion, dispersion.MaxDispersion);
+                colors[i] = Utility.GetScaledColor(this.reorderedDispersion[i], min , max);
             }
-            this.reorderedColors = this.mapper.Reorder<Color>(colors, this.depthFrameDescription.Width, this.depthFrameDescription.Height);
-            this.reorderedDispersion = this.mapper.Reorder<float>(dispersion.PixelsDispersion, this.depthFrameDescription.Width, this.depthFrameDescription.Height);
-            
+            this.reorderedColors = colors;      
+        }
+
+        public void AddDispersion(Dispersion dispersion)
+        {
+            this.reorderedDispersion = this.mapper.Reorder<float>(dispersion.PixelsDispersion);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="colorData"></param>
-        public void CreateColorMesh(ColorData colorData)
+        public void CreateColorMesh()
         {
             byte[] interpolatedColors = colorData.InterpolateColors();
             this.kinect.CoordinateMapper.MapCameraPointsToColorSpace(this.cameraSpacePoints, this.colorSpacePoints);
             byte[] mappedColors = Mapper.MapColorToDepth(interpolatedColors, this.colorSpacePoints, this.colorFrameDescription.Width, this.colorFrameDescription.Height, 4);
             Color[] colors = Utility.GetColorsFromRGBA(mappedColors, 4);
-            this.reorderedColors = this.mapper.Reorder<Color>(colors, this.depthFrameDescription.Width, this.depthFrameDescription.Height);
+            this.reorderedColors = this.mapper.Reorder<Color>(colors);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="points"></param>
-        public void GenerateMesh()
+        public void GenerateMesh(String path, bool append, bool triangles)
         {
-            for (int i = 0; i < reorderedPoints.Length; i++)
-            {
-                CameraSpacePoint point = reorderedPoints[i];
-                Color color = reorderedColors[i];
-                this.streamWriter.WriteLine("v {0} {1} {2} {3} {4} {5}", point.X.ToString(this.numberFormatInfo),
-                    point.Y.ToString(this.numberFormatInfo), point.Z.ToString(this.numberFormatInfo), (color.R / 255.0).ToString(this.numberFormatInfo),
-                    (color.G / 255.0).ToString(this.numberFormatInfo), (color.B / 255.0).ToString(this.numberFormatInfo), reorderedDispersion[i].ToString(this.numberFormatInfo));
-            }
+            using(StreamWriter streamWriter = new StreamWriter(path, append))
+            {               
+                if (reorderedPoints != null)
+                {
+                    streamWriter.WriteLine("Zde zacina novy frame.");
+                    for (int i = 0; i < reorderedPoints.Length; i++)
+                    {
+                        CameraSpacePoint point = reorderedPoints[i];
+                        if (reorderedColors != null && reorderedDispersion != null)
+                        {
+                            Color color = reorderedColors[i];
+                            streamWriter.WriteLine("v {0} {1} {2} {3} {4} {5} {6}", point.X.ToString("N", this.numberFormatInfo),
+                            point.Y.ToString("N", this.numberFormatInfo), point.Z.ToString("N", this.numberFormatInfo), (color.R / 255.0).ToString("N", this.numberFormatInfo),
+                            (color.G / 255.0).ToString("N", this.numberFormatInfo), (color.B / 255.0).ToString("N", this.numberFormatInfo), reorderedDispersion[i].ToString("N", this.numberFormatInfo));
+                        }
+                        else if (reorderedDispersion != null)
+                        {
+                            streamWriter.WriteLine("v {0} {1} {2} {3}", point.X.ToString("N", this.numberFormatInfo),
+                            point.Y.ToString("N", this.numberFormatInfo), point.Z.ToString("N", this.numberFormatInfo), reorderedDispersion[i].ToString("N", this.numberFormatInfo));
+                        }
+                        else if (reorderedColors != null)
+                        {
+                            Color color = reorderedColors[i];
+                            streamWriter.WriteLine("v {0} {1} {2} {3} {4} {5}", point.X.ToString("N", this.numberFormatInfo),
+                            point.Y.ToString("N", this.numberFormatInfo), point.Z.ToString("N", this.numberFormatInfo), (color.R / 255.0).ToString("N", this.numberFormatInfo),
+                            (color.G / 255.0).ToString("N", this.numberFormatInfo), (color.B / 255.0).ToString("N", this.numberFormatInfo));
+                        }
+                        else
+                        {
+                            streamWriter.WriteLine("v {0} {1} {2}", point.X.ToString("N", this.numberFormatInfo),
+                            point.Y.ToString("N", this.numberFormatInfo), point.Z.ToString("N", this.numberFormatInfo));
+                        }
+                    }
 
-            foreach (int[] triangle in this.mapper.TriangleList)
+                    if (triangles)
+                    {
+                        foreach (int[] triangle in this.mapper.TriangleList)
+                        {
+                            streamWriter.WriteLine("f {0} {1} {2}", triangle[0], triangle[1], triangle[2]);
+                        }
+                    }
+                }
+            }            
+        }
+
+        public void Clear()
+        {
+            reorderedPoints = null;
+            reorderedColors = null;
+            reorderedDispersion = null;
+        }
+
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
             {
-                this.streamWriter.WriteLine("f {0} {1} {2}", triangle[0], triangle[1], triangle[2]);
+                if (disposing)
+                {
+                    this.depthFrameDescription = null;
+                    this.colorFrameDescription = null;
+                    this.cameraSpacePoints = null;
+                    this.colorSpacePoints = null;
+                    this.model = null;
+                    this.mapper = null;
+                    this.depthData = null;
+                    this.colorData = null;
+                    this.numberFormatInfo = null;
+                    Clear();
+                }
+                disposedValue = true;
             }
-            this.streamWriter.Close();
+        }
+
+        
+         ~Visualisation() {
+        
+           Dispose(false);
+        }
+
+        
+        public void Dispose()
+        {
+            
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

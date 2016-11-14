@@ -9,26 +9,8 @@ namespace _3DScanning
 {
     class Dispersion
     {
-        private float min;
-        private float max;
         private float[] pixelsDispersion;
         private CircularStack<ushort[]> framesStack;
-
-        public float MinDispersion
-        {
-            get
-            {
-                return this.min;
-            }
-        }
-
-        public float MaxDispersion
-        {
-            get
-            {
-                return this.max;
-            }
-        }
 
         public float[] PixelsDispersion
         {
@@ -43,15 +25,12 @@ namespace _3DScanning
             this.framesStack = framesStack;
         }
 
-        public void CreateDispersions(CameraSpacePoint[] averagePixels)
+        public void CreateDispersions(ushort[] averagePixels)
         {
             this.pixelsDispersion = new float[averagePixels.Length];
             for (int i = 0; i < averagePixels.Length; i++)
             {
-                float dispersion = GetPointDispersion(averagePixels[i].Z*1000, i);
-                pixelsDispersion[i] = dispersion;
-                if (dispersion > this.max) { this.max = dispersion; }
-                if (dispersion < this.min) { this.min = dispersion; }
+                pixelsDispersion[i] = GetPointDispersion(averagePixels[i], i);
             }
         }
 
@@ -61,7 +40,7 @@ namespace _3DScanning
         /// <param name="averageDepth"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private float GetPointDispersion(float averageDepth, int index)
+        private float GetPointDispersion(ushort averageDepth, int index)
         {
             float dispersion = 0;
             int zeroCounter = 0;

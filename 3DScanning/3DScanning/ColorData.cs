@@ -20,8 +20,6 @@ namespace _3DScanning
         /// </summary>
         protected FrameDescription colorFrameDescription;
 
-        private int index = -1;
-
         private KinectAttributes kinectAttributes;
 
         /// <summary>
@@ -71,11 +69,10 @@ namespace _3DScanning
         /// </summary>
         public byte[] InterpolateColors()
         {
-            byte[] interpolatedColors = new byte[colorFrameDescription.LengthInPixels];
+            byte[] interpolatedColors = new byte[colorFrameDescription.LengthInPixels*4];
             for (int i = 0; i < interpolatedColors.Length; i++)
             {
-                int averageColor = Utility.GetAverageValue(i, colorFramesStack.GetRange(this.kinectAttributes.Interpolation));
-                interpolatedColors[i] = (byte)averageColor;
+                interpolatedColors[i] = (byte) Utility.GetAverageValue(i, colorFramesStack.GetRange(this.kinectAttributes.Interpolation));
             }
 
             return interpolatedColors;
