@@ -4,6 +4,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Microsoft.Kinect;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace _3DScanning
 {
@@ -81,6 +82,7 @@ namespace _3DScanning
             this.scaledMeshRB.Enabled = !state;
             this.generateAllCB.Enabled = !state;
             this.generateBT.Enabled = !state;
+            this.dispersionCB.Enabled = !state;
         }
 
         /// <summary>
@@ -94,13 +96,15 @@ namespace _3DScanning
             this.maxDepthValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
             this.interpolationValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
             this.interpolationTB.DataBindings.Add("Value", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.scaledMeshRB.CheckedChanged += delegate (object sender, EventArgs e) {
+            this.scaledMeshRB.CheckedChanged += delegate (object sender, EventArgs e)
+            {
                 if (scaledMeshRB.Checked)
                 {
                     dispersionCB.Checked = true;
                     dispersionCB.Enabled = false;
 
-                } else
+                }
+                else
                 {
                     dispersionCB.Checked = false;
                     dispersionCB.Enabled = true;
@@ -122,7 +126,7 @@ namespace _3DScanning
                 if (multiSourceFrame != null)
                 {
                     this.depthData.AddDepthData(multiSourceFrame);
-                    this.colorData.AddColorData(multiSourceFrame);                    
+                    this.colorData.AddColorData(multiSourceFrame);
                     //
                     if (this.tabIndex == 1)
                     {
@@ -139,7 +143,8 @@ namespace _3DScanning
                     //
                     if (this.generating && this.kinect.KinectAttributes.Interpolation <= this.depthData.Data.Count && this.kinect.KinectAttributes.Interpolation <= this.colorData.Data.Count)
                     {
-                        if ( this.generateAllCB.Checked)
+
+                        if (this.generateAllCB.Checked)
                         {
                             this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation);
                         }
@@ -153,15 +158,17 @@ namespace _3DScanning
                         }
                         if (this.coloredMeshRB.Checked) { this.visualisation.CreateColorMesh(); }
                         else if (this.scaledMeshRB.Checked) { this.visualisation.CreateScaledMesh(); }
-                        this.visualisation.GenerateMesh(path+"\\points.obj", false, true);
+                        this.visualisation.GenerateMesh(path + "\\points.obj", false, true);
+
                         this.generating = false;
                         this.DisableControls(false);
                         this.statusLB.Text = "Mesh byl vygenerován a uložen.";
                     }
                 }
             }
-            catch
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 this.statusLB.Text = "Vyskytla se chyba. Prosím restartujte aplikaci.";
             }
         }
@@ -180,7 +187,7 @@ namespace _3DScanning
                 this.path = folderBrowserDialog.SelectedPath;
             }
             this.visualisation.Clear();
-            if (generateAllCB.Checked) { this.visualisation.GenerateMesh(path + "\\allFrames.obj", false, false); }           
+            if (generateAllCB.Checked) { this.visualisation.GenerateMesh(path + "\\allFrames.obj", false, false); }
             this.statusLB.Text = "Probíhá generování meshe!";
             this.DisableControls(true);
             this.generating = true;

@@ -28,10 +28,8 @@ namespace _3DScanning
         public void CreateDispersions(ushort[] averagePixels)
         {
             this.pixelsDispersion = new float[averagePixels.Length];
-            for (int i = 0; i < averagePixels.Length; i++)
-            {
-                pixelsDispersion[i] = GetPointDispersion(averagePixels[i], i);
-            }
+            Parallel.For(0, averagePixels.Length, index => pixelsDispersion[index] = GetPointDispersion(averagePixels[index], index));
+            
         }
 
         /// <summary>

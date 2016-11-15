@@ -108,11 +108,11 @@ namespace _3DScanning
         public R[] Reorder<R>(R[] points)
         {
             R[] reordered = new R[freeIndex];
-            for (int i = 0; i < depthHeight * depthWidth; i++)
+            Parallel.For(0, depthHeight * depthWidth, index =>
             {
-                if (indices[i] > 0)
-                    reordered[indices[i]] = points[i];
-            }
+                if (indices[index] > 0)
+                    reordered[indices[index]] = points[index];
+            });
             return reordered;
         }
 
@@ -137,9 +137,9 @@ namespace _3DScanning
         public static byte[] MapColorToDepth(byte[] colorData, ColorSpacePoint[] colorSpacePoint, int width, int height, int bytesPerPixel)
         {
             byte[] colorPixels = new byte[colorData.Length];
-            for (int depthIndex = 0; depthIndex < colorSpacePoint.Length; ++depthIndex)
+            Parallel.For(0, colorSpacePoint.Length, index =>
             {
-                ColorSpacePoint point = colorSpacePoint[depthIndex];
+                ColorSpacePoint point = colorSpacePoint[index];
 
                 int colorX = (int)Math.Floor(point.X + 0.5);
                 int colorY = (int)Math.Floor(point.Y + 0.5);
@@ -147,14 +147,14 @@ namespace _3DScanning
                 if ((colorX >= 0) && (colorX < width) && (colorY >= 0) && (colorY < height))
                 {
                     int colorImageIndex = ((width * colorY) + colorX) * bytesPerPixel;
-                    int depthPixel = depthIndex * bytesPerPixel;
+                    int depthPixel = index * bytesPerPixel;
 
                     colorPixels[depthPixel] = colorData[colorImageIndex];
                     colorPixels[depthPixel + 1] = colorData[colorImageIndex + 1];
                     colorPixels[depthPixel + 2] = colorData[colorImageIndex + 2];
                     colorPixels[depthPixel + 3] = colorData[colorImageIndex + 3];
                 }
-            }
+            });
             return colorPixels;
         }
     }

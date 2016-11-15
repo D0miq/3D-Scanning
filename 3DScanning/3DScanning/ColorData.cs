@@ -1,5 +1,6 @@
 ﻿using Microsoft.Kinect;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace _3DScanning
 {
@@ -70,10 +71,10 @@ namespace _3DScanning
         public byte[] InterpolateColors()
         {
             byte[] interpolatedColors = new byte[colorFrameDescription.LengthInPixels*4];
-            for (int i = 0; i < interpolatedColors.Length; i++)
-            {
-                interpolatedColors[i] = (byte) Utility.GetAverageValue(i, colorFramesStack.GetRange(this.kinectAttributes.Interpolation));
-            }
+            CircularStack<byte[]> interpolatingFrames = colorFramesStack.GetRange(this.kinectAttributes.Interpolation);
+            Parallel.For(0, interpolatedColors.Length, index => 
+                interpolatedColors[index] = (byte) Utility.GetAverageValue(index, interpolatingFrames)
+            );
 
             return interpolatedColors;
         }

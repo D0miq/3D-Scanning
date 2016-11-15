@@ -14,6 +14,10 @@ namespace _3DScanning
         /// </summary>
         private const int MAP_DEPTH_TO_BYTE = 8000 / 256;
 
+        public const int BYTES_PER_PIXEL = 4;
+
+        public static int MAX_INTERPOLATION = Environment.Is64BitProcess ? 500 : 100;
+
         /// <summary>
         /// 
         /// </summary>
@@ -90,12 +94,12 @@ namespace _3DScanning
         public static byte[] GetColorFromDepth(ushort[] depthData)
         {
             KinectAttributes kinectAttributes = Kinect.GetInstance().KinectAttributes;
-            byte[] depthColors = new byte[depthData.Length];          
-            for (int i = 0; i < depthData.Length; i++)
+            byte[] depthColors = new byte[depthData.Length];
+            Parallel.For(0, depthData.Length, index =>
             {
-                ushort depth = depthData[i];
-                depthColors[i] = (byte)(depth >= kinectAttributes.MinDepth && depth <= kinectAttributes.MaxDepth ? (depth / MAP_DEPTH_TO_BYTE) : 0);
-            }
+                ushort depth = depthData[index];
+                depthColors[index] = (byte)(depth >= kinectAttributes.MinDepth && depth <= kinectAttributes.MaxDepth ? (depth / MAP_DEPTH_TO_BYTE) : 0);
+            });
             return depthColors;
         }
     }

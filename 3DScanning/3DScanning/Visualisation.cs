@@ -112,8 +112,7 @@ namespace _3DScanning
             ushort[] reducedValues = depthData.ReduceDepthRange(depthValues);
             this.kinect.CoordinateMapper.MapDepthFrameToCameraSpace(reducedValues, this.cameraSpacePoints);
             this.mapper.CameraToWorldTransfer(this.cameraSpacePoints);
-            this.reorderedPoints = this.mapper.Reorder<CameraSpacePoint>(cameraSpacePoints);
-            return reorderedPoints;
+            return this.mapper.Reorder<CameraSpacePoint>(cameraSpacePoints);
         }
 
         /// <summary>
@@ -124,7 +123,7 @@ namespace _3DScanning
         public ushort[] CreateCleanInterpolatedMesh()
         {
             ushort[] interpolatedDepths = depthData.InterpolateDepths();
-            CreateCleanMesh(interpolatedDepths);
+            this.reorderedPoints = CreateCleanMesh(interpolatedDepths);
             return interpolatedDepths;
         }
 
@@ -137,8 +136,8 @@ namespace _3DScanning
         {              
             foreach(ushort[] frame in depthData.Data.GetRange(numberOfFrames).IterableData)
             {
-                CreateCleanMesh(frame);
-                GenerateMesh(path + "\\allFrames.obj", true, false);
+                CameraSpacePoint[] reorderedPoints = CreateCleanMesh(frame);
+                GenerateMesh(path + "\\allFrames.obj", reorderedPoints, true, false);
             }
         }
 
@@ -176,11 +175,16 @@ namespace _3DScanning
             this.reorderedColors = this.mapper.Reorder<Color>(colors);
         }
 
+        public void GenerateMesh(String path, bool append, bool triangles)
+        {
+            GenerateMesh(path, this.reorderedPoints, append, triangles);
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="points"></param>
-        public void GenerateMesh(String path, bool append, bool triangles)
+        public void GenerateMesh(String path, CameraSpacePoint[] reorderedPoints ,bool append, bool triangles)
         {
             using(StreamWriter streamWriter = new StreamWriter(path, append))
             {               

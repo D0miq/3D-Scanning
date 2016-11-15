@@ -79,12 +79,8 @@ namespace _3DScanning
         public ushort[] InterpolateDepths()
         {
             ushort[] interpolatedDepths = new ushort[this.depthFrameDescription.LengthInPixels];
-            for (int i = 0; i < interpolatedDepths.Length; i++)
-            {
-                int averageDepth = Utility.GetAverageValue(i, this.depthFramesStack.GetRange(kinectAttributes.Interpolation));
-                interpolatedDepths[i] = (ushort)averageDepth;
-            }
-
+            CircularStack<ushort[]> interpolatingFrames = this.depthFramesStack.GetRange(kinectAttributes.Interpolation);
+            Parallel.For(0, interpolatedDepths.Length, index => interpolatedDepths[index] = (ushort) Utility.GetAverageValue(index, interpolatingFrames));
             return interpolatedDepths;
         }
 
@@ -95,13 +91,13 @@ namespace _3DScanning
         public ushort[] ReduceDepthRange(ushort[] depthData)
         {
             ushort[] reducedDepth = new ushort[depthData.Length];
-            for (int i = 0; i < depthData.Length; i++)
+            Parallel.For(0, depthData.Length, index =>
             {
-                if (depthData[i] < this.kinectAttributes.MaxDepth && depthData[i] > this.kinectAttributes.MinDepth)
+                if (depthData[index] < this.kinectAttributes.MaxDepth && depthData[index] > this.kinectAttributes.MinDepth)
                 {
-                    reducedDepth[i] = depthData[i];
+                    reducedDepth[index] = depthData[index];
                 }
-            }
+            });
             return reducedDepth;
         }
     }
