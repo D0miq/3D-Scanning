@@ -83,6 +83,7 @@ namespace _3DScanning
             this.generateAllCB.Enabled = !state;
             this.generateBT.Enabled = !state;
             this.dispersionCB.Enabled = !state;
+            this.clearBT.Enabled = !state;
         }
 
         /// <summary>
@@ -138,8 +139,6 @@ namespace _3DScanning
                         this.previewing = false;
                         this.statusLB.Text = "Náhled byl zobrazen.";
                     }
-
-
                     //
                     if (this.generating && this.kinect.KinectAttributes.Interpolation <= this.depthData.Data.Count && this.kinect.KinectAttributes.Interpolation <= this.colorData.Data.Count)
                     {
@@ -151,11 +150,13 @@ namespace _3DScanning
 
                         Dispersion dispersion = new Dispersion(depthData.Data.GetRange(this.kinect.KinectAttributes.Interpolation));
                         ushort[] interpolatedMesh = this.visualisation.CreateCleanInterpolatedMesh();
+
                         if (dispersionCB.Checked)
                         {
                             dispersion.CreateDispersions(interpolatedMesh);
                             this.visualisation.AddDispersion(dispersion);
                         }
+
                         if (this.coloredMeshRB.Checked) { this.visualisation.CreateColorMesh(); }
                         else if (this.scaledMeshRB.Checked) { this.visualisation.CreateScaledMesh(); }
                         this.visualisation.GenerateMesh(path + "\\points.obj", false, true);
@@ -163,13 +164,15 @@ namespace _3DScanning
                         this.generating = false;
                         this.DisableControls(false);
                         this.statusLB.Text = "Mesh byl vygenerován a uložen.";
+                        this.progressBar.Value = 0;
+                        this.progressBar.Hide();
                     }
                 }
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                this.statusLB.Text = "Vyskytla se chyba. Prosím restartujte aplikaci.";
+                this.statusLB.Text = "Vyskytla se chyba. Restartujte aplikaci.";
             }
         }
 
@@ -188,6 +191,7 @@ namespace _3DScanning
             }
             this.visualisation.Clear();
             if (generateAllCB.Checked) { this.visualisation.GenerateMesh(path + "\\allFrames.obj", false, false); }
+            this.progressBar.Show();
             this.statusLB.Text = "Probíhá generování meshe!";
             this.DisableControls(true);
             this.generating = true;
@@ -212,6 +216,18 @@ namespace _3DScanning
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.tabIndex = (sender as TabControl).SelectedIndex;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clearBT_Click(object sender, EventArgs e)
+        {
+            this.depthData.Data.Clear();
+            this.colorData.Data.Clear();
+            this.statusLB.Text = "Předzpracovaná data byla vymazána.";
         }
     }
 }

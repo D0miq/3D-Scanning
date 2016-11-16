@@ -32,8 +32,7 @@ namespace _3DScanning
 
         public CircularStack()
         {
-            if (Environment.Is64BitProcess) { maxLength = 500; }
-            else { maxLength = 100; }
+            maxLength = Utility.MAX_INTERPOLATION;
             array = new R[maxLength];
         }
 

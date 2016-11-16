@@ -9,11 +9,6 @@ namespace _3DScanning
         /// <summary>
         /// 
         /// </summary>
-        private const int BYTES_PER_PIXEL = 4;
-
-        /// <summary>
-        /// 
-        /// </summary>
         private CircularStack<byte[]> colorFramesStack;
 
         /// <summary>
@@ -59,7 +54,7 @@ namespace _3DScanning
                 if (colorFrame == null)
                     return;
 
-                colorData = new byte[colorFrameDescription.LengthInPixels * BYTES_PER_PIXEL];
+                colorData = new byte[colorFrameDescription.LengthInPixels * Utility.BYTES_PER_PIXEL];
                 colorFrame.CopyConvertedFrameDataToArray(colorData, ColorImageFormat.Rgba);
                 this.colorFramesStack.Push(colorData);
             }
@@ -70,7 +65,7 @@ namespace _3DScanning
         /// </summary>
         public byte[] InterpolateColors()
         {
-            byte[] interpolatedColors = new byte[colorFrameDescription.LengthInPixels*4];
+            byte[] interpolatedColors = new byte[colorFrameDescription.LengthInPixels*Utility.BYTES_PER_PIXEL];
             CircularStack<byte[]> interpolatingFrames = colorFramesStack.GetRange(this.kinectAttributes.Interpolation);
             Parallel.For(0, interpolatedColors.Length, index => 
                 interpolatedColors[index] = (byte) Utility.GetAverageValue(index, interpolatingFrames)

@@ -134,7 +134,7 @@ namespace _3DScanning
         /// <summary>
         ///
         /// </summary>
-        public static byte[] MapColorToDepth(byte[] colorData, ColorSpacePoint[] colorSpacePoint, int width, int height, int bytesPerPixel)
+        public static byte[] MapColorToDepth(byte[] colorData, ColorSpacePoint[] colorSpacePoint, int width, int height)
         {
             byte[] colorPixels = new byte[colorData.Length];
             Parallel.For(0, colorSpacePoint.Length, index =>
@@ -146,8 +146,8 @@ namespace _3DScanning
 
                 if ((colorX >= 0) && (colorX < width) && (colorY >= 0) && (colorY < height))
                 {
-                    int colorImageIndex = ((width * colorY) + colorX) * bytesPerPixel;
-                    int depthPixel = index * bytesPerPixel;
+                    int colorImageIndex = ((width * colorY) + colorX) * Utility.BYTES_PER_PIXEL;
+                    int depthPixel = index * Utility.BYTES_PER_PIXEL;
 
                     colorPixels[depthPixel] = colorData[colorImageIndex];
                     colorPixels[depthPixel + 1] = colorData[colorImageIndex + 1];

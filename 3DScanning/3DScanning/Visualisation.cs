@@ -170,8 +170,8 @@ namespace _3DScanning
         {
             byte[] interpolatedColors = colorData.InterpolateColors();
             this.kinect.CoordinateMapper.MapCameraPointsToColorSpace(this.cameraSpacePoints, this.colorSpacePoints);
-            byte[] mappedColors = Mapper.MapColorToDepth(interpolatedColors, this.colorSpacePoints, this.colorFrameDescription.Width, this.colorFrameDescription.Height, 4);
-            Color[] colors = Utility.GetColorsFromRGBA(mappedColors, 4);
+            byte[] mappedColors = Mapper.MapColorToDepth(interpolatedColors, this.colorSpacePoints, this.colorFrameDescription.Width, this.colorFrameDescription.Height);
+            Color[] colors = Utility.GetColorsFromRGBA(mappedColors);
             this.reorderedColors = this.mapper.Reorder<Color>(colors);
         }
 
