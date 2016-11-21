@@ -23,7 +23,7 @@ namespace _3DScanning
         /// </summary>
         private WriteableBitmap writeableBitmap;
 
-        private string path;
+        private string path = "";
 
         private object locker;
 
@@ -103,7 +103,6 @@ namespace _3DScanning
                 {
                     dispersionCB.Checked = true;
                     dispersionCB.Enabled = false;
-
                 }
                 else
                 {
@@ -119,7 +118,7 @@ namespace _3DScanning
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Reader_FrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
+        public async void Reader_FrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             try
             {
@@ -128,6 +127,7 @@ namespace _3DScanning
                 {
                     this.depthData.AddDepthData(multiSourceFrame);
                     this.colorData.AddColorData(multiSourceFrame);
+
                     //
                     if (this.tabIndex == 1)
                     {
@@ -139,41 +139,65 @@ namespace _3DScanning
                         this.previewing = false;
                         this.statusLB.Text = "Náhled byl zobrazen.";
                     }
+
                     //
                     if (this.generating && this.kinect.KinectAttributes.Interpolation <= this.depthData.Data.Count && this.kinect.KinectAttributes.Interpolation <= this.colorData.Data.Count)
                     {
-
-                        if (this.generateAllCB.Checked)
-                        {
-                            this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation);
-                        }
-
-                        Dispersion dispersion = new Dispersion(depthData.Data.GetRange(this.kinect.KinectAttributes.Interpolation));
-                        ushort[] interpolatedMesh = this.visualisation.CreateCleanInterpolatedMesh();
-
-                        if (dispersionCB.Checked)
-                        {
-                            dispersion.CreateDispersions(interpolatedMesh);
-                            this.visualisation.AddDispersion(dispersion);
-                        }
-
-                        if (this.coloredMeshRB.Checked) { this.visualisation.CreateColorMesh(); }
-                        else if (this.scaledMeshRB.Checked) { this.visualisation.CreateScaledMesh(); }
-                        this.visualisation.GenerateMesh(path + "\\points.obj", false, true);
-
                         this.generating = false;
+                        var progress = new Progress<int>(v =>
+                        {
+                            progressBar.Increment(v);
+                        });
+
+                        await Task.Run(() => DoWork(progress));
+
                         this.DisableControls(false);
                         this.statusLB.Text = "Mesh byl vygenerován a uložen.";
                         this.progressBar.Value = 0;
                         this.progressBar.Hide();
+
                     }
                 }
+                
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
                 this.statusLB.Text = "Vyskytla se chyba. Restartujte aplikaci.";
             }
+        }
+
+        public void DoWork(IProgress<int> progress)
+        {
+            Parallel.Invoke(() =>
+            {
+                if (this.generateAllCB.Checked)
+                {
+                    progress.Report(1);
+                    this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation);
+                    progress.Report(1);
+                }
+            },() =>
+            {
+                progress.Report(1);
+                Dispersion dispersion = new Dispersion(depthData.Data.GetRange(this.kinect.KinectAttributes.Interpolation));
+                progress.Report(1);
+                ushort[] interpolatedDepths = depthData.InterpolateDepths();
+                progress.Report(1);
+                Mesh mesh = this.visualisation.CreateCleanMesh(interpolatedDepths);
+                progress.Report(1);
+                if (dispersionCB.Checked)
+                {
+                    dispersion.CreateDispersions(interpolatedDepths);
+                    this.visualisation.AddDispersion(dispersion, mesh);
+                }
+                progress.Report(1);
+                if (this.coloredMeshRB.Checked) { this.visualisation.AddRealColors(mesh); }
+                else if (this.scaledMeshRB.Checked) { this.visualisation.AddComputedColors(mesh); }
+                progress.Report(1);
+                this.visualisation.GenerateMesh(path + "\\points.obj", mesh, false, true, "");
+                progress.Report(1);
+            });
         }
 
         /// <summary>
@@ -183,18 +207,25 @@ namespace _3DScanning
         /// <param name="e">Event arguments</param>
         private void GenerateBT_Click(object sender, EventArgs e)
         {
-            if (path == null)
+            if (path.Equals(""))
             {
                 FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
                 folderBrowserDialog.ShowDialog();
                 this.path = folderBrowserDialog.SelectedPath;
             }
-            this.visualisation.Clear();
-            if (generateAllCB.Checked) { this.visualisation.GenerateMesh(path + "\\allFrames.obj", false, false); }
-            this.progressBar.Show();
-            this.statusLB.Text = "Probíhá generování meshe!";
-            this.DisableControls(true);
-            this.generating = true;
+            if (!path.Equals(""))
+            {
+                this.progressBar.Maximum = 7;
+                if (generateAllCB.Checked)
+                {
+                    this.visualisation.GenerateMesh(path + "\\allFrames.obj", null , false, false, "");
+                    this.progressBar.Maximum = 9;
+                }
+                this.progressBar.Show();
+                this.statusLB.Text = "Probíhá generování meshe!";
+                this.DisableControls(true);
+                this.generating = true;
+            }
         }
 
         /// <summary>

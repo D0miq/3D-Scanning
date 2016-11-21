@@ -9,9 +9,19 @@ namespace _3DScanning
 {
     class Dispersion
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private float[] pixelsDispersion;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private CircularStack<ushort[]> framesStack;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public float[] PixelsDispersion
         {
             get
@@ -20,16 +30,23 @@ namespace _3DScanning
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="framesStack"></param>
         public Dispersion(CircularStack<ushort[]> framesStack)
         {
             this.framesStack = framesStack;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="averagePixels"></param>
         public void CreateDispersions(ushort[] averagePixels)
         {
             this.pixelsDispersion = new float[averagePixels.Length];
-            Parallel.For(0, averagePixels.Length, index => pixelsDispersion[index] = GetPointDispersion(averagePixels[index], index));
-            
+            Parallel.For(0, averagePixels.Length, index => pixelsDispersion[index] = GetPointDispersion(averagePixels[index], index));            
         }
 
         /// <summary>
@@ -47,6 +64,7 @@ namespace _3DScanning
                 if(depthArray[index] == 0) { zeroCounter++; }
                 else { dispersion += (float)Math.Pow((depthArray[index] - averageDepth), 2); }
             }
+            if(zeroCounter == this.framesStack.Count) { return 0; }
             return dispersion /= this.framesStack.Count - zeroCounter;
         }
     }

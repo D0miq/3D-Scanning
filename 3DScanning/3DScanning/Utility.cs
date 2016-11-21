@@ -14,8 +14,14 @@ namespace _3DScanning
         /// </summary>
         private const int MAP_DEPTH_TO_BYTE = 8000 / 256;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public const int BYTES_PER_PIXEL = 4;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static int MAX_INTERPOLATION = Environment.Is64BitProcess ? 500 : 100;
 
         /// <summary>
@@ -78,6 +84,13 @@ namespace _3DScanning
             return colors;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public static Color GetScaledColor(float value, float min, float max)
         {
             float t = (value - min) / (max - min);

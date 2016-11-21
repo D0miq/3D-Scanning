@@ -35,6 +35,9 @@ namespace _3DScanning
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ushort[] LastData
         {
             get

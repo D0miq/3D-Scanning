@@ -16,6 +16,9 @@ namespace _3DScanning
         /// </summary>
         protected FrameDescription colorFrameDescription;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private KinectAttributes kinectAttributes;
 
         /// <summary>
@@ -28,7 +31,6 @@ namespace _3DScanning
                 return colorFramesStack;
             }
         }
-
 
         /// <summary>
         /// 

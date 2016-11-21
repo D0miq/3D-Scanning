@@ -55,7 +55,7 @@ namespace _3DScanning
             this.tabPointCloud = new System.Windows.Forms.TabPage();
             this.tabDepthFrame = new System.Windows.Forms.TabPage();
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.imageControl = new _3DScanning.ImageControl();
+            this.imageControl = new ImageControl();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
@@ -103,7 +103,7 @@ namespace _3DScanning
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -191,7 +191,7 @@ namespace _3DScanning
             this.tableLayoutPanel1.SetColumnSpan(this.interpolationTB, 6);
             this.interpolationTB.LargeChange = 10;
             this.interpolationTB.Location = new System.Drawing.Point(3, 153);
-            this.interpolationTB.Maximum = 100;
+            this.interpolationTB.Maximum = Utility.MAX_INTERPOLATION;
             this.interpolationTB.Minimum = 1;
             this.interpolationTB.Name = "interpolationTB";
             this.interpolationTB.Size = new System.Drawing.Size(244, 24);
@@ -209,7 +209,7 @@ namespace _3DScanning
             this.tableLayoutPanel1.SetColumnSpan(this.colorlessMeshRB, 2);
             this.colorlessMeshRB.Location = new System.Drawing.Point(3, 183);
             this.colorlessMeshRB.Name = "colorlessMeshRB";
-            this.colorlessMeshRB.Size = new System.Drawing.Size(76, 24);
+            this.colorlessMeshRB.Size = new System.Drawing.Size(76, 34);
             this.colorlessMeshRB.TabIndex = 25;
             this.colorlessMeshRB.TabStop = true;
             this.colorlessMeshRB.Text = "Bezbarvý mesh";
@@ -225,7 +225,7 @@ namespace _3DScanning
             this.tableLayoutPanel1.SetColumnSpan(this.coloredMeshRB, 2);
             this.coloredMeshRB.Location = new System.Drawing.Point(167, 183);
             this.coloredMeshRB.Name = "coloredMeshRB";
-            this.coloredMeshRB.Size = new System.Drawing.Size(80, 24);
+            this.coloredMeshRB.Size = new System.Drawing.Size(80, 34);
             this.coloredMeshRB.TabIndex = 23;
             this.coloredMeshRB.Text = "Barevný mesh";
             this.coloredMeshRB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -277,7 +277,7 @@ namespace _3DScanning
             this.clearBT.Name = "clearBT";
             this.clearBT.Size = new System.Drawing.Size(80, 34);
             this.clearBT.TabIndex = 30;
-            this.clearBT.Text = "Vyčištit data";
+            this.clearBT.Text = "Vymazat data";
             this.clearBT.UseVisualStyleBackColor = true;
             this.clearBT.Click += new System.EventHandler(this.clearBT_Click);
             // 
@@ -288,7 +288,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.generateAllCB.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.generateAllCB, 4);
-            this.generateAllCB.Location = new System.Drawing.Point(3, 213);
+            this.generateAllCB.Location = new System.Drawing.Point(3, 223);
             this.generateAllCB.Name = "generateAllCB";
             this.generateAllCB.Size = new System.Drawing.Size(158, 24);
             this.generateAllCB.TabIndex = 20;
@@ -303,7 +303,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dispersionCB.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.dispersionCB, 4);
-            this.dispersionCB.Location = new System.Drawing.Point(3, 243);
+            this.dispersionCB.Location = new System.Drawing.Point(3, 253);
             this.dispersionCB.Name = "dispersionCB";
             this.dispersionCB.Size = new System.Drawing.Size(158, 24);
             this.dispersionCB.TabIndex = 28;
@@ -331,7 +331,7 @@ namespace _3DScanning
             this.tableLayoutPanel1.SetColumnSpan(this.scaledMeshRB, 2);
             this.scaledMeshRB.Location = new System.Drawing.Point(85, 183);
             this.scaledMeshRB.Name = "scaledMeshRB";
-            this.scaledMeshRB.Size = new System.Drawing.Size(76, 24);
+            this.scaledMeshRB.Size = new System.Drawing.Size(76, 34);
             this.scaledMeshRB.TabIndex = 22;
             this.scaledMeshRB.Text = "Škálovaný mesh";
             this.scaledMeshRB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -411,7 +411,7 @@ namespace _3DScanning
             this.elementHost.Size = new System.Drawing.Size(724, 485);
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost";
-            this.elementHost.Child = this.imageControl;
+            this.elementHost.Child = imageControl;
             // 
             // Form
             // 
@@ -432,7 +432,6 @@ namespace _3DScanning
             this.tabPointCloud.ResumeLayout(false);
             this.tabDepthFrame.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion

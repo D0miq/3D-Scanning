@@ -57,7 +57,6 @@ G:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.pdb
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\bin\OpenTKLib.dll.config
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\bin\OpenTKLib.dll
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\bin\OpenTKLib.pdb
-J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.csprojResolveAssemblyReference.cache
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.AboutForm.resources
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.SettingsForm.resources
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\OpenTKLib\obj\Debug\OpenTKLib.MultipleOGLControls.resources
