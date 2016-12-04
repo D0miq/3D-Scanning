@@ -30,6 +30,7 @@ namespace _3DScanning
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.minDepthLB = new System.Windows.Forms.Label();
@@ -54,8 +55,9 @@ namespace _3DScanning
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPointCloud = new System.Windows.Forms.TabPage();
             this.tabDepthFrame = new System.Windows.Forms.TabPage();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.imageControl = new ImageControl();
+            this.imageControl = new _3DScanning.ImageControl();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
@@ -197,6 +199,8 @@ namespace _3DScanning
             this.interpolationTB.Size = new System.Drawing.Size(244, 24);
             this.interpolationTB.TabIndex = 17;
             this.interpolationTB.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.toolTip.SetToolTip(this.interpolationTB, "Pokud posuvník ukazuje maximální hranici 2000 volte jeho hodnotu rozumně podle ve" +
+        "likosti své RAM paměti. (500 interpolací = 5 GB)");
             this.interpolationTB.Value = 1;
             // 
             // colorlessMeshRB
@@ -411,7 +415,7 @@ namespace _3DScanning
             this.elementHost.Size = new System.Drawing.Size(724, 485);
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost";
-            this.elementHost.Child = imageControl;
+            this.elementHost.Child = this.imageControl;
             // 
             // Form
             // 
@@ -432,6 +436,7 @@ namespace _3DScanning
             this.tabPointCloud.ResumeLayout(false);
             this.tabDepthFrame.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -462,6 +467,7 @@ namespace _3DScanning
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button clearBT;
         private System.Windows.Forms.Label statusLB;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 

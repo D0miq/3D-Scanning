@@ -56,11 +56,6 @@ namespace _3DScanning
             numberFormatInfo.NumberDecimalDigits = 10;
         }
 
-
-
-
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -98,13 +93,6 @@ namespace _3DScanning
             viewport.GLrender.AddRenderableObject(model);
         }
 
-
-
-
-
-
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -126,20 +114,15 @@ namespace _3DScanning
         /// </summary>
         /// <param name="path"></param>
         /// <param name="numberOfFrames"></param>
-        public void CreatePointsFromAllFrames(String path, int numberOfFrames)
+        public void CreatePointsFromAllFrames(String path, int numberOfFrames, int counter)
         {
             int k = 1;           
             foreach(ushort[] frame in depthData.Data.GetRange(numberOfFrames).IterableData)
             {
                 Mesh mesh = CreateCleanMesh(frame);
-                GenerateMesh(path + "\\allFrames.obj", mesh, true, false, "Frame cislo: " + k++);
+                GenerateMesh(path + "\\allFrames" + counter + ".obj", mesh, true, false, "Frame cislo: " + k++);
             }
         }
-
-
-
-
-
 
         /// <summary>
         /// 
@@ -175,11 +158,6 @@ namespace _3DScanning
             mesh.Colors = mesh.Reorder<Color>(colors);
         }
 
-
-
-
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -210,8 +188,7 @@ namespace _3DScanning
 
                 }
             }
-        }            
-        
+        }                   
 
         private bool disposedValue = false;
 
@@ -233,14 +210,12 @@ namespace _3DScanning
                 disposedValue = true;
             }
         }
-
-        
+       
          ~Visualisation() {
         
            Dispose(false);
         }
-
-        
+       
         public void Dispose()
         {
             

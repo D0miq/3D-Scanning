@@ -39,6 +39,8 @@ namespace _3DScanning
 
         private ColorData colorData;
 
+        private int counter = 0;
+
         /// <summary>
         /// Creates form and inicialize kinect sensor, kinect attributes and camera space points
         /// </summary>
@@ -155,6 +157,7 @@ namespace _3DScanning
                         this.statusLB.Text = "Mesh byl vygenerován a uložen.";
                         this.progressBar.Value = 0;
                         this.progressBar.Hide();
+                        this.counter++;
 
                     }
                 }
@@ -174,7 +177,7 @@ namespace _3DScanning
                 if (this.generateAllCB.Checked)
                 {
                     progress.Report(1);
-                    this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation);
+                    this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation, this.counter);
                     progress.Report(1);
                 }
             },() =>
@@ -195,7 +198,7 @@ namespace _3DScanning
                 if (this.coloredMeshRB.Checked) { this.visualisation.AddRealColors(mesh); }
                 else if (this.scaledMeshRB.Checked) { this.visualisation.AddComputedColors(mesh); }
                 progress.Report(1);
-                this.visualisation.GenerateMesh(path + "\\points.obj", mesh, false, true, "");
+                this.visualisation.GenerateMesh(path + "\\points" + counter + ".obj", mesh, false, true, "");
                 progress.Report(1);
             });
         }
