@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace _3DScanning
 {
     class KinectAttributes : INotifyPropertyChanged
     {
+        public const int MIN_DEPTH = 500;
+
+        public const int MAX_DEPTH = 8000;
+
+        public const int MIN_INTERPOLATION = 1;
+
+        public const int MAX_INTERPOLATION = 10000;
+
         /// <summary>
         /// Minimal depth
         /// </summary>
@@ -29,8 +32,8 @@ namespace _3DScanning
         /// </summary>
         public KinectAttributes()
         {
-            this.minDepth = 500;
-            this.maxDepth = 8000;
+            this.minDepth = MIN_DEPTH;
+            this.maxDepth = MAX_DEPTH;
             this.interpolation = 100;
         }
 
@@ -51,7 +54,7 @@ namespace _3DScanning
 
             set
             {
-                if (value < this.maxDepth && value >= 500)
+                if (value < this.maxDepth && value >= MIN_DEPTH)
                 {
                     this.minDepth = value;
                     if (null != this.PropertyChanged)
@@ -74,7 +77,7 @@ namespace _3DScanning
 
             set
             {
-                if (value > this.minDepth && value <= 8000)
+                if (value > this.minDepth && value <= MAX_DEPTH)
                 {
                     this.maxDepth = value;
                     if (null != this.PropertyChanged)
@@ -98,11 +101,14 @@ namespace _3DScanning
 
             set
             {
-                this.interpolation = value;
-                if (null != this.PropertyChanged)
+                if (value > MIN_INTERPOLATION && value <= MAX_INTERPOLATION)
                 {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Interpolation"));
-                }
+                    this.interpolation = value;
+                    if (null != this.PropertyChanged)
+                    {
+                        this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Interpolation"));
+                    }
+                }                  
             }
         }
     }

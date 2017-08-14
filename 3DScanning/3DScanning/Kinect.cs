@@ -1,6 +1,5 @@
-﻿using Microsoft.Kinect;
+using Microsoft.Kinect;
 using System;
-using System.ComponentModel;
 
 namespace _3DScanning
 {

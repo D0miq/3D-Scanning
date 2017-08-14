@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 using System.Threading.Tasks;
 
 namespace _3DScanning
@@ -18,55 +14,6 @@ namespace _3DScanning
         /// 
         /// </summary>
         public const int BYTES_PER_PIXEL = 4;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static int MAX_INTERPOLATION = Environment.Is64BitProcess ? 500 : 100;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="index"></param>
-        /// <param name="framesList"></param>
-        /// <returns></returns>
-        public static int GetAverageValue(int index, CircularStack<ushort[]> framesStack)
-        {
-            int averageValue = 0;
-            int zeroCounter = 0;
-            foreach (ushort[] array in framesStack.IterableData)
-            {
-                if (array[index] == 0)
-                {
-                    zeroCounter++;
-                }
-                averageValue += array[index];
-            }
-            if (averageValue != 0)
-            {
-                averageValue /= (framesStack.Count - zeroCounter);
-            }
-            return averageValue;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="framesList"></param>
-        /// <returns></returns>
-        public static int GetAverageValue(int index, CircularStack<byte[]> framesStack)
-        {
-            int averageValue = 0;
-            foreach (byte[] array in framesStack.IterableData)
-            {
-                averageValue += array[index];
-            }
-            averageValue /= framesStack.Count;
-            return averageValue;
-
-        }
 
         /// <summary>
         /// 

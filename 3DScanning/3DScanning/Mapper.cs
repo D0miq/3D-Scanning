@@ -1,4 +1,4 @@
-﻿using Microsoft.Kinect;
+using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +19,8 @@ namespace _3DScanning
             {
                 ColorSpacePoint point = colorSpacePoint[index];
 
-                int colorX = (int)Math.Floor(point.X + 0.5);
-                int colorY = (int)Math.Floor(point.Y + 0.5);
+                int colorX = (int) Math.Floor(point.X + 0.5);
+                int colorY = (int) Math.Floor(point.Y + 0.5);
 
                 if ((colorX >= 0) && (colorX < width) && (colorY >= 0) && (colorY < height))
                 {

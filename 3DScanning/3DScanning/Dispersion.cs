@@ -17,11 +17,6 @@ namespace _3DScanning
         /// <summary>
         /// 
         /// </summary>
-        private CircularStack<ushort[]> framesStack;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public float[] PixelsDispersion
         {
             get
@@ -34,9 +29,8 @@ namespace _3DScanning
         /// 
         /// </summary>
         /// <param name="framesStack"></param>
-        public Dispersion(CircularStack<ushort[]> framesStack)
+        public Dispersion()
         {
-            this.framesStack = framesStack;
         }
 
         /// <summary>

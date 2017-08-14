@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Microsoft.Kinect;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace _3DScanning
@@ -23,22 +22,44 @@ namespace _3DScanning
         /// </summary>
         private WriteableBitmap writeableBitmap;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private string path = "";
 
-        private object locker;
-
+        /// <summary>
+        /// 
+        /// </summary>
         private bool generating = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private bool previewing = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private int tabIndex = 0;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private Kinect kinect;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private DepthData depthData;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private ColorData colorData;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private int counter = 0;
 
         /// <summary>
@@ -51,9 +72,8 @@ namespace _3DScanning
             this.kinect.AddEventHandler(this.Reader_FrameArrived);
             this.depthData = new DepthData();
             this.colorData = new ColorData();
-            this.visualisation = new Visualisation(this.depthData, this.colorData);
+            this.visualisation = new Visualisation(this.depthData);
             this.writeableBitmap = new WriteableBitmap(kinect.DepthFrameDescription.Width, kinect.DepthFrameDescription.Height, 96.0, 96.0, PixelFormats.Gray8, null);
-            this.locker = new object();
             this.DataBinding();
             this.kinect.Start();
         }
@@ -85,7 +105,6 @@ namespace _3DScanning
             this.generateAllCB.Enabled = !state;
             this.generateBT.Enabled = !state;
             this.dispersionCB.Enabled = !state;
-            this.clearBT.Enabled = !state;
         }
 
         /// <summary>
@@ -95,9 +114,9 @@ namespace _3DScanning
         {
             this.minDepthTB.DataBindings.Add("Value", this.kinect.KinectAttributes, "MinDepth", false, DataSourceUpdateMode.OnPropertyChanged);
             this.maxDepthTB.DataBindings.Add("Value", this.kinect.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.minDepthValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "MinDepth", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.maxDepthValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.interpolationValueLB.DataBindings.Add("Text", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.minDepthValueTB.DataBindings.Add("Text", this.kinect.KinectAttributes, "MinDepth", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.maxDepthValueTB.DataBindings.Add("Text", this.kinect.KinectAttributes, "MaxDepth", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.interpolationValueTB.DataBindings.Add("Text", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
             this.interpolationTB.DataBindings.Add("Value", this.kinect.KinectAttributes, "Interpolation", false, DataSourceUpdateMode.OnPropertyChanged);
             this.scaledMeshRB.CheckedChanged += delegate (object sender, EventArgs e)
             {
@@ -127,8 +146,7 @@ namespace _3DScanning
                 MultiSourceFrame multiSourceFrame = e.FrameReference.AcquireFrame();
                 if (multiSourceFrame != null)
                 {
-                    this.depthData.AddDepthData(multiSourceFrame);
-                    this.colorData.AddColorData(multiSourceFrame);
+                    this.depthData.SetLastFrame(multiSourceFrame);
 
                     //
                     if (this.tabIndex == 1)
@@ -143,22 +161,27 @@ namespace _3DScanning
                     }
 
                     //
-                    if (this.generating && this.kinect.KinectAttributes.Interpolation <= this.depthData.Data.Count && this.kinect.KinectAttributes.Interpolation <= this.colorData.Data.Count)
+                    if (this.generating)
                     {
-                        this.generating = false;
-                        var progress = new Progress<int>(v =>
+                        this.depthData.AddLastFrame();
+                        this.colorData.AddFrame(multiSourceFrame);
+                        if (this.kinect.KinectAttributes.Interpolation <= this.depthData.FramesCount && this.kinect.KinectAttributes.Interpolation <= this.colorData.FramesCount)
                         {
-                            progressBar.Increment(v);
-                        });
+                            this.generating = false;
+                            this.stopBT.Enabled = false;
+                            var progress = new Progress<int>(v =>
+                            {
+                                progressBar.Increment(v);
+                            });
 
-                        await Task.Run(() => DoWork(progress));
+                            await Task.Run(() => DoWork(progress));
 
-                        this.DisableControls(false);
-                        this.statusLB.Text = "Mesh byl vygenerován a uložen.";
-                        this.progressBar.Value = 0;
-                        this.progressBar.Hide();
-                        this.counter++;
-
+                            this.DisableControls(false);
+                            this.statusLB.Text = "Mesh byl vygenerován a uložen.";
+                            this.progressBar.Value = 0;
+                            this.progressBar.Hide();
+                            this.counter++;
+                        }
                     }
                 }
                 
@@ -170,6 +193,10 @@ namespace _3DScanning
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="progress"></param>
         public void DoWork(IProgress<int> progress)
         {
             Parallel.Invoke(() =>
@@ -177,28 +204,30 @@ namespace _3DScanning
                 if (this.generateAllCB.Checked)
                 {
                     progress.Report(1);
-                    this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation, this.counter);
+            //        this.visualisation.CreatePointsFromAllFrames(path, this.kinect.KinectAttributes.Interpolation, this.counter);
                     progress.Report(1);
                 }
             },() =>
             {
                 progress.Report(1);
-                Dispersion dispersion = new Dispersion(depthData.Data.GetRange(this.kinect.KinectAttributes.Interpolation));
-                progress.Report(1);
-                ushort[] interpolatedDepths = depthData.InterpolateDepths();
-                progress.Report(1);
-                Mesh mesh = this.visualisation.CreateCleanMesh(interpolatedDepths);
+                this.depthData.ReduceRange();
+                var meshBuilder = new Mesh.Builder(this.depthData.Data);
                 progress.Report(1);
                 if (dispersionCB.Checked)
                 {
-                    dispersion.CreateDispersions(interpolatedDepths);
-                    this.visualisation.AddDispersion(dispersion, mesh);
+                    this.depthData.FinalizeDispersion();
+                    meshBuilder.AddDispersions(this.depthData.Dispersion);
                 }
                 progress.Report(1);
-                if (this.coloredMeshRB.Checked) { this.visualisation.AddRealColors(mesh); }
-                else if (this.scaledMeshRB.Checked) { this.visualisation.AddComputedColors(mesh); }
+                if (this.coloredMeshRB.Checked)
+                {
+                    meshBuilder.AddRealColors(this.colorData.Data);
+                } else if (this.scaledMeshRB.Checked)
+                {
+                    meshBuilder.AddComputedColors(this.depthData.Dispersion);
+                }
                 progress.Report(1);
-                this.visualisation.GenerateMesh(path + "\\points" + counter + ".obj", mesh, false, true, "");
+                meshBuilder.Build().GenerateMesh(path + "\\3Dscan" + counter + ".obj", false, true, "");
                 progress.Report(1);
             });
         }
@@ -218,13 +247,16 @@ namespace _3DScanning
             }
             if (!path.Equals(""))
             {
+                this.depthData.ClearData();
+                this.colorData.ClearData();
                 this.progressBar.Maximum = 7;
                 if (generateAllCB.Checked)
                 {
-                    this.visualisation.GenerateMesh(path + "\\allFrames.obj", null , false, false, "");
+//                    this.visualisation.GenerateMesh(path + "\\allFrames.obj", null , false, false, "");
                     this.progressBar.Maximum = 9;
                 }
                 this.progressBar.Show();
+                this.stopBT.Enabled = true;
                 this.statusLB.Text = "Probíhá generování meshe!";
                 this.DisableControls(true);
                 this.generating = true;
@@ -243,25 +275,23 @@ namespace _3DScanning
         }
 
         /// <summary>
-        /// 
+        /// Event that triggers when tabs are changed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Object sending the event</param>
+        /// <param name="e">Event arguments</param>
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.tabIndex = (sender as TabControl).SelectedIndex;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void clearBT_Click(object sender, EventArgs e)
+
+        private void StopBT_Click(object sender, EventArgs e)
         {
-            this.depthData.Data.Clear();
-            this.colorData.Data.Clear();
-            this.statusLB.Text = "Předzpracovaná data byla vymazána.";
+            this.generating = false;
+            this.statusLB.Text = "Generování zastaveno!";
+            this.DisableControls(false);
+            this.progressBar.Hide();
+            this.stopBT.Enabled = false;
         }
     }
 }

@@ -77,6 +77,8 @@
     <Reference Include="Microsoft.Kinect.Fusion, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64" />
     <Reference Include="Microsoft.Kinect.Tools, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64" />
     <Reference Include="Microsoft.Kinect.Wpf.Controls, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="OpenTK">
       <HintPath>..\binExtern\OpenTK.dll</HintPath>
     </Reference>
@@ -87,6 +89,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -103,13 +106,11 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CircularStack.cs" />
     <Compile Include="ColorData.cs" />
     <Compile Include="DepthData.cs" />
     <Compile Include="Mapper.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="Visualisation.cs" />
-    <Compile Include="Dispersion.cs" />
     <Compile Include="Form.cs">
       <SubType>Form</SubType>
     </Compile>
