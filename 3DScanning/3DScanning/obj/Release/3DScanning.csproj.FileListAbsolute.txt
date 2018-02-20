@@ -24,3 +24,6 @@ J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Release\_3DScanning.Pr
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Release\3DScanning.csproj.GenerateResource.Cache
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Release\3DScanning.exe
 J:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Release\3DScanning.pdb
+I:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\bin\Release\3DScanning.exe.config
+I:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Release\3DScanning.exe
+I:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Release\3DScanning.pdb
