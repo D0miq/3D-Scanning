@@ -1,6 +1,3 @@
-
-using System;
-
 namespace _3DScanning
 {
     partial class Form
@@ -52,13 +49,14 @@ namespace _3DScanning
             this.scaledMeshRB = new System.Windows.Forms.RadioButton();
             this.interpolationValueTB = new System.Windows.Forms.TextBox();
             this.maxDepthValueTB = new System.Windows.Forms.TextBox();
-            this.viewport = new OpenTKLib.OGLControl();
+            this.elementHostViewport = new System.Windows.Forms.Integration.ElementHost();
+            this.viewport = new _3DScanning._3DViewer();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPointCloud = new System.Windows.Forms.TabPage();
             this.tabDepthFrame = new System.Windows.Forms.TabPage();
+            this.elementHostImage = new System.Windows.Forms.Integration.ElementHost();
+            this.imageControl = new _3DScanning.ImageControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.imageControl = new ImageControl();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minDepthTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxDepthTB)).BeginInit();
@@ -120,6 +118,7 @@ namespace _3DScanning
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel.SetColumnSpan(this.progressBar, 4);
+            this.progressBar.Location = new System.Drawing.Point(44, 431);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(158, 23);
             this.progressBar.Step = 1;
@@ -129,6 +128,7 @@ namespace _3DScanning
             // minDepthLB
             // 
             this.tableLayoutPanel.SetColumnSpan(this.minDepthLB, 3);
+            this.minDepthLB.Location = new System.Drawing.Point(3, 3);
             this.minDepthLB.Margin = new System.Windows.Forms.Padding(3);
             this.minDepthLB.Name = "minDepthLB";
             this.minDepthLB.Size = new System.Drawing.Size(117, 24);
@@ -141,8 +141,9 @@ namespace _3DScanning
             this.minDepthTB.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel.SetColumnSpan(this.minDepthTB, 6);
             this.minDepthTB.LargeChange = 50;
-            this.minDepthTB.Maximum = KinectAttributes.MAX_DEPTH;
-            this.minDepthTB.Minimum = KinectAttributes.MIN_DEPTH;
+            this.minDepthTB.Location = new System.Drawing.Point(3, 33);
+            this.minDepthTB.Maximum = 8000;
+            this.minDepthTB.Minimum = 500;
             this.minDepthTB.Name = "minDepthTB";
             this.minDepthTB.Size = new System.Drawing.Size(244, 24);
             this.minDepthTB.SmallChange = 10;
@@ -153,6 +154,7 @@ namespace _3DScanning
             // maxDepthLB
             // 
             this.tableLayoutPanel.SetColumnSpan(this.maxDepthLB, 3);
+            this.maxDepthLB.Location = new System.Drawing.Point(3, 63);
             this.maxDepthLB.Margin = new System.Windows.Forms.Padding(3);
             this.maxDepthLB.Name = "maxDepthLB";
             this.maxDepthLB.Size = new System.Drawing.Size(117, 24);
@@ -164,8 +166,9 @@ namespace _3DScanning
             // 
             this.tableLayoutPanel.SetColumnSpan(this.maxDepthTB, 6);
             this.maxDepthTB.LargeChange = 50;
-            this.maxDepthTB.Maximum = KinectAttributes.MAX_DEPTH;
-            this.maxDepthTB.Minimum = KinectAttributes.MIN_DEPTH;
+            this.maxDepthTB.Location = new System.Drawing.Point(3, 93);
+            this.maxDepthTB.Maximum = 8000;
+            this.maxDepthTB.Minimum = 500;
             this.maxDepthTB.Name = "maxDepthTB";
             this.maxDepthTB.Size = new System.Drawing.Size(244, 24);
             this.maxDepthTB.SmallChange = 10;
@@ -176,6 +179,7 @@ namespace _3DScanning
             // interpolationLB
             // 
             this.tableLayoutPanel.SetColumnSpan(this.interpolationLB, 3);
+            this.interpolationLB.Location = new System.Drawing.Point(3, 123);
             this.interpolationLB.Margin = new System.Windows.Forms.Padding(3);
             this.interpolationLB.Name = "interpolationLB";
             this.interpolationLB.Size = new System.Drawing.Size(117, 24);
@@ -187,8 +191,9 @@ namespace _3DScanning
             // 
             this.tableLayoutPanel.SetColumnSpan(this.interpolationTB, 6);
             this.interpolationTB.LargeChange = 10;
-            this.interpolationTB.Maximum = KinectAttributes.MAX_INTERPOLATION;
-            this.interpolationTB.Minimum = KinectAttributes.MIN_INTERPOLATION;
+            this.interpolationTB.Location = new System.Drawing.Point(3, 153);
+            this.interpolationTB.Maximum = 10000;
+            this.interpolationTB.Minimum = 1;
             this.interpolationTB.Name = "interpolationTB";
             this.interpolationTB.Size = new System.Drawing.Size(244, 24);
             this.interpolationTB.TabIndex = 17;
@@ -204,6 +209,7 @@ namespace _3DScanning
             this.colorlessMeshRB.AutoSize = true;
             this.colorlessMeshRB.Checked = true;
             this.tableLayoutPanel.SetColumnSpan(this.colorlessMeshRB, 2);
+            this.colorlessMeshRB.Location = new System.Drawing.Point(3, 183);
             this.colorlessMeshRB.Name = "colorlessMeshRB";
             this.colorlessMeshRB.Size = new System.Drawing.Size(76, 34);
             this.colorlessMeshRB.TabIndex = 25;
@@ -219,6 +225,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.coloredMeshRB.AutoSize = true;
             this.tableLayoutPanel.SetColumnSpan(this.coloredMeshRB, 2);
+            this.coloredMeshRB.Location = new System.Drawing.Point(167, 183);
             this.coloredMeshRB.Name = "coloredMeshRB";
             this.coloredMeshRB.Size = new System.Drawing.Size(80, 34);
             this.coloredMeshRB.TabIndex = 23;
@@ -229,6 +236,7 @@ namespace _3DScanning
             // previewBT
             // 
             this.tableLayoutPanel.SetColumnSpan(this.previewBT, 2);
+            this.previewBT.Location = new System.Drawing.Point(3, 460);
             this.previewBT.Name = "previewBT";
             this.previewBT.Size = new System.Drawing.Size(76, 34);
             this.previewBT.TabIndex = 0;
@@ -239,6 +247,7 @@ namespace _3DScanning
             // generateBT
             // 
             this.tableLayoutPanel.SetColumnSpan(this.generateBT, 2);
+            this.generateBT.Location = new System.Drawing.Point(85, 460);
             this.generateBT.Name = "generateBT";
             this.generateBT.Size = new System.Drawing.Size(76, 34);
             this.generateBT.TabIndex = 1;
@@ -249,11 +258,12 @@ namespace _3DScanning
             // stopBT
             // 
             this.tableLayoutPanel.SetColumnSpan(this.stopBT, 2);
+            this.stopBT.Enabled = false;
+            this.stopBT.Location = new System.Drawing.Point(167, 460);
             this.stopBT.Name = "stopBT";
             this.stopBT.Size = new System.Drawing.Size(76, 34);
             this.stopBT.TabIndex = 1;
             this.stopBT.Text = "Zastavit generování";
-            this.stopBT.Enabled = false;
             this.stopBT.UseVisualStyleBackColor = true;
             this.stopBT.Click += new System.EventHandler(this.StopBT_Click);
             // 
@@ -264,6 +274,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLB.AutoSize = true;
             this.tableLayoutPanel.SetColumnSpan(this.statusLB, 6);
+            this.statusLB.Location = new System.Drawing.Point(3, 500);
             this.statusLB.Margin = new System.Windows.Forms.Padding(3);
             this.statusLB.Name = "statusLB";
             this.statusLB.Size = new System.Drawing.Size(244, 14);
@@ -277,6 +288,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.generateAllCB.AutoSize = true;
             this.tableLayoutPanel.SetColumnSpan(this.generateAllCB, 4);
+            this.generateAllCB.Location = new System.Drawing.Point(3, 223);
             this.generateAllCB.Name = "generateAllCB";
             this.generateAllCB.Size = new System.Drawing.Size(158, 24);
             this.generateAllCB.TabIndex = 20;
@@ -291,6 +303,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dispersionCB.AutoSize = true;
             this.tableLayoutPanel.SetColumnSpan(this.dispersionCB, 4);
+            this.dispersionCB.Location = new System.Drawing.Point(3, 253);
             this.dispersionCB.Name = "dispersionCB";
             this.dispersionCB.Size = new System.Drawing.Size(158, 24);
             this.dispersionCB.TabIndex = 28;
@@ -302,11 +315,10 @@ namespace _3DScanning
             this.minDepthValueTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.minDepthValueTB.Margin = new System.Windows.Forms.Padding(3);
-            this.minDepthValueTB.Name = "minDepthValueLB";
-            this.minDepthValueTB.Size = new System.Drawing.Size(35, 24);
+            this.minDepthValueTB.Location = new System.Drawing.Point(126, 3);
+            this.minDepthValueTB.Name = "minDepthValueTB";
+            this.minDepthValueTB.Size = new System.Drawing.Size(35, 20);
             this.minDepthValueTB.TabIndex = 12;
-            this.minDepthValueTB.Multiline = false;
             // 
             // scaledMeshRB
             // 
@@ -315,6 +327,7 @@ namespace _3DScanning
             | System.Windows.Forms.AnchorStyles.Right)));
             this.scaledMeshRB.AutoSize = true;
             this.tableLayoutPanel.SetColumnSpan(this.scaledMeshRB, 2);
+            this.scaledMeshRB.Location = new System.Drawing.Point(85, 183);
             this.scaledMeshRB.Name = "scaledMeshRB";
             this.scaledMeshRB.Size = new System.Drawing.Size(76, 34);
             this.scaledMeshRB.TabIndex = 22;
@@ -324,32 +337,24 @@ namespace _3DScanning
             // 
             // interpolationValueTB
             // 
-            this.interpolationValueTB.Margin = new System.Windows.Forms.Padding(3);
-            this.interpolationValueTB.Name = "interpolationValueLB";
-            this.interpolationValueTB.Size = new System.Drawing.Size(35, 24);
+            this.interpolationValueTB.Location = new System.Drawing.Point(126, 123);
+            this.interpolationValueTB.Name = "interpolationValueTB";
+            this.interpolationValueTB.Size = new System.Drawing.Size(35, 20);
             this.interpolationValueTB.TabIndex = 27;
-            this.interpolationValueTB.Multiline = false;
             // 
             // maxDepthValueTB
             // 
             this.maxDepthValueTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxDepthValueTB.Margin = new System.Windows.Forms.Padding(3);
-            this.maxDepthValueTB.Name = "maxDepthValueLB";
-            this.maxDepthValueTB.Size = new System.Drawing.Size(35, 24);
+            this.maxDepthValueTB.Location = new System.Drawing.Point(126, 63);
+            this.maxDepthValueTB.Name = "maxDepthValueTB";
+            this.maxDepthValueTB.Size = new System.Drawing.Size(35, 20);
             this.maxDepthValueTB.TabIndex = 26;
-            this.maxDepthValueTB.Multiline = false;
             // 
             // viewport
             // 
-            this.viewport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(255)))));
-            this.viewport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.viewport.Location = new System.Drawing.Point(3, 3);
             this.viewport.Name = "viewport";
-            this.viewport.Size = new System.Drawing.Size(724, 485);
-            this.viewport.TabIndex = 1;
-            this.viewport.VSync = false;
             // 
             // tabControl
             // 
@@ -365,7 +370,7 @@ namespace _3DScanning
             // 
             // tabPointCloud
             // 
-            this.tabPointCloud.Controls.Add(this.viewport);
+            this.tabPointCloud.Controls.Add(this.elementHostViewport);
             this.tabPointCloud.Location = new System.Drawing.Point(4, 22);
             this.tabPointCloud.Name = "tabPointCloud";
             this.tabPointCloud.Padding = new System.Windows.Forms.Padding(3);
@@ -376,7 +381,7 @@ namespace _3DScanning
             // 
             // tabDepthFrame
             // 
-            this.tabDepthFrame.Controls.Add(this.elementHost);
+            this.tabDepthFrame.Controls.Add(this.elementHostImage);
             this.tabDepthFrame.Location = new System.Drawing.Point(4, 22);
             this.tabDepthFrame.Name = "tabDepthFrame";
             this.tabDepthFrame.Padding = new System.Windows.Forms.Padding(3);
@@ -385,16 +390,27 @@ namespace _3DScanning
             this.tabDepthFrame.Text = "Depth Frame";
             this.tabDepthFrame.UseVisualStyleBackColor = true;
             // 
-            // elementHost
+            // elementHostImage
             // 
-            this.elementHost.BackColor = System.Drawing.Color.Black;
-            this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.elementHost.Location = new System.Drawing.Point(3, 3);
-            this.elementHost.Name = "elementHost";
-            this.elementHost.Size = new System.Drawing.Size(724, 485);
-            this.elementHost.TabIndex = 0;
-            this.elementHost.Text = "elementHost";
-            elementHost.Child = this.imageControl;
+            this.elementHostImage.BackColor = System.Drawing.Color.Black;
+            this.elementHostImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHostImage.Location = new System.Drawing.Point(3, 3);
+            this.elementHostImage.Name = "elementHost";
+            this.elementHostImage.Size = new System.Drawing.Size(724, 485);
+            this.elementHostImage.TabIndex = 0;
+            this.elementHostImage.Text = "elementHost";
+            this.elementHostImage.Child = this.imageControl;
+            // 
+            // elementHostViewport
+            // 
+            this.elementHostViewport.BackColor = System.Drawing.Color.Black;
+            this.elementHostViewport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHostViewport.Location = new System.Drawing.Point(3, 3);
+            this.elementHostViewport.Name = "elementHostViewport";
+            this.elementHostViewport.Size = new System.Drawing.Size(724, 485);
+            this.elementHostViewport.TabIndex = 1;
+            this.elementHostViewport.Text = "elementHostViewport";
+            this.elementHostViewport.Child = this.viewport;
             // 
             // Form
             // 
@@ -432,11 +448,12 @@ namespace _3DScanning
         private System.Windows.Forms.Label interpolationLB;
         private System.Windows.Forms.TrackBar interpolationTB;
         private System.Windows.Forms.CheckBox generateAllCB;
-        private OpenTKLib.OGLControl viewport;
+        private System.Windows.Forms.Integration.ElementHost elementHostViewport;
+        private _3DViewer viewport;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPointCloud;
         private System.Windows.Forms.TabPage tabDepthFrame;
-        private System.Windows.Forms.Integration.ElementHost elementHost;
+        private System.Windows.Forms.Integration.ElementHost elementHostImage;
         private ImageControl imageControl;
         private System.Windows.Forms.RadioButton scaledMeshRB;
         private System.Windows.Forms.RadioButton coloredMeshRB;

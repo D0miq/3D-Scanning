@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-I:\Dokumenty\GitHub\3D-Scanning\3DScanning\3DScanning\obj\Debug\
+I:\Dokumenty\GitHub\Kinect_static_scanning\3DScanning\3DScanning\obj\Debug\
 _3DScanning
 none
 false
 DEBUG;TRACE
 
-1-1678120317
+21403148910
 
-19-1246632799
-27-730520923
-ImageControl.xaml;
+21-1866389558
+801043801749
+3DViewer.xaml;ImageControl.xaml;
 
-True
+False
 
